@@ -48,7 +48,7 @@
     /* Gray Scale (100: #FFFFFF -> 1500: #000000) */
     --gray-100: #ffffff;
     --gray-200: #f5f5f5;
-    --gray-300: #e5e5e5;
+    --gray-300: #e6e6e6;
     --gray-400: #d4d4d4;
     --gray-500: #cccccc;
     --gray-600: #737373;
@@ -69,7 +69,7 @@
     --orange-400: #f0ac6b;
     --orange-500: #e28743;
     --orange-600: #c97135;
-    --orange-700: #EE8927;
+    --orange-700: #ee8927;
     --orange-800: #854a22;
     --orange-900: #6b3b1b;
     --orange-1000: #542e15;

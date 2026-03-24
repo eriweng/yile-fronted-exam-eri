@@ -30,7 +30,7 @@ function App() {
       </div>
 
       {/* 內容區塊 */}
-      <div className="p-[16px] mb-[12px] flex flex-col flex-grow gap-[12px] bg-white border-t border-b border-gray-500 shadow-content-card">
+      <div className="p-[16px] flex flex-col flex-grow gap-[12px] bg-white border-t border-b border-gray-500 shadow-content-card">
         {/* 段落標題 */}
         <div className="flex items-center self-start gap-[8px] mb-[16px]">
           <div className="h-[20px] w-[4px] rounded bg-orange-500" />
@@ -52,7 +52,7 @@ function App() {
         </div>
 
         {/* 分頁元件 */}
-        <div className="px-[6px] h-[32px] flex justify-center items-center gap-[6px] bg-red-500">
+        <div className="px-[6px] h-[32px] flex justify-center items-center gap-[6px]">
           {/* 上一頁 — ChevronLeft icon，disabled 時淡化 */}
           <button
             disabled={page === 1}
