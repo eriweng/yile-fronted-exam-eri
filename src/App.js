@@ -5,6 +5,13 @@ function App() {
   const [jobs, setJobs] = useState([]);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1440);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 1440);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     // 取得工作資料
@@ -16,8 +23,28 @@ function App() {
       });
   }, [page]);
 
-  // 簡易計算總頁數，若需要精確呈現亦可使用 total
+  // 簡易計算總頁數
   const totalPages = Math.ceil(total / 4) || 6;
+
+  // 計算要顯示的頁碼範圍
+  const getPageNumbers = () => {
+    const maxDisplay = isMobile ? 6 : 9;
+    let start = Math.max(1, page - Math.floor(maxDisplay / 2));
+    let end = start + maxDisplay - 1;
+
+    if (end > totalPages) {
+      end = totalPages;
+      start = Math.max(1, end - maxDisplay + 1);
+    }
+
+    const pages = [];
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+    return pages;
+  };
+
+  const visiblePages = getPageNumbers();
 
   return (
     <div className="mx-auto min-h-screen max-w-[375px] bg-white shadow-xl flex flex-col overflow-hidden relative">
@@ -52,7 +79,7 @@ function App() {
         </div>
 
         {/* 分頁元件 */}
-        <div className="px-[6px] h-[32px] flex justify-center items-center gap-[6px] bg-red-500">
+        <div className="px-[6px] h-[32px] flex justify-center items-center gap-[6px]">
           {/* 上一頁 — ChevronLeft icon，disabled 時淡化 */}
           <button
             disabled={page === 1}
@@ -69,22 +96,19 @@ function App() {
           </button>
 
           {/* 頁碼 */}
-          {Array.from({ length: totalPages }).map((_, i) => {
-            const p = i + 1;
-            return (
-              <button
-                key={p}
-                onClick={() => setPage(p)}
-                className={`w-[32px] h-[32px] rounded-full flex items-center justify-center text-body-sm flex-shrink-0 text-gray-1000 transition-colors ${
-                  page === p
-                    ? 'bg-gray-300 text-gray-1000 font-bold'
-                    : 'text-gray-600 hover:bg-gray-200'
-                }`}
-              >
-                {p}
-              </button>
-            );
-          })}
+          {visiblePages.map((p) => (
+            <button
+              key={p}
+              onClick={() => setPage(p)}
+              className={`w-[32px] h-[32px] rounded-full flex items-center justify-center text-body-sm flex-shrink-0 text-gray-1000 transition-colors ${
+                page === p
+                  ? 'bg-gray-300 text-gray-1000 font-bold'
+                  : 'text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              {p}
+            </button>
+          ))}
 
           {/* 下一頁 — ChevronRight icon，disabled 時淡化 */}
           <button
