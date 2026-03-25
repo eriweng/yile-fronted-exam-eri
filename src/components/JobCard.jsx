@@ -49,11 +49,11 @@ const MoneyIcon = () => (
 );
 
 export default function JobCard({
-  companyName = '弈樂科技',
-  jobTitle = '前端工程師 Frontend Engineer',
-  education = '學歷',
-  salary = '薪水範圍',
-  description = '負責設計、開發和維護技術方案，解決複雜的問題。擁有卓越的問題解決能力和創新思維，熟練應用科技工具，確保項目高效實施。具備協作精神，致力於推動科技進步。',
+  companyName,
+  jobTitle,
+  education,
+  salary,
+  description,
 }) {
   return (
     <div className="flex flex-col w-full min-h-[220px] rounded-[6px] border border-[1px] border-gray-500 p-[16px] gap-[10px] bg-white hover:shadow-custom-glow transition-shadow duration-200 cursor-pointer">

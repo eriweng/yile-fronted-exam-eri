@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
+import App from './App.jsx';
 import jobList from './constants/jobList';
 import educationList from './constants/educationList';
 import salaryList from './constants/salaryList';
