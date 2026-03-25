@@ -33,7 +33,8 @@
     ],
     "rules": {
       "prettier/prettier": "error",
-      "require-jsdoc": "off"
+      "require-jsdoc": "off",
+      "valid-jsdoc": "off"
     }
   },
   "browserslist": {

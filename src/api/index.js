@@ -46,29 +46,12 @@ apiClient.interceptors.response.use(
 );
 
 // 封裝各個 API 呼叫
-/**
- * 取得工作列表
- * @param {Object} params - 查詢參數 (pre_page, page)
- * @return {Promise}
- */
-export const getJobs = (params) => {
-  return apiClient.get('/jobs', { params });
-};
 
-/**
- * 取得學歷等級列表
- * @return {Promise}
- */
-export const getEducationLevels = () => {
-  return apiClient.get('/educationLevelList');
-};
+/** @param {{ pre_page: number, page: number }} params */
+export const getJobs = (params) => apiClient.get('/jobs', { params });
 
-/**
- * 取得薪資等級列表
- * @return {Promise}
- */
-export const getSalaryLevels = () => {
-  return apiClient.get('/salaryLevelList');
-};
+export const getEducationLevels = () => apiClient.get('/educationLevelList');
+
+export const getSalaryLevels = () => apiClient.get('/salaryLevelList');
 
 export default apiClient;
