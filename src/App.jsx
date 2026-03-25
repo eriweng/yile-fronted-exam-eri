@@ -86,27 +86,29 @@ function App() {
           </h2>
         </div>
 
-        {/* 篩選列 */}
-        <div className="flex flex-col gap-[12px] mb-[4px]">
-          <SelectField
-            label="教育程度"
-            value={filterEducation}
-            onChange={(val) => {
-              setFilterEducation(val);
-              setPage(1);
-            }}
-            options={educationLevels}
-            placeholder="請選擇教育程度"
-          />
-          <InputField
-            label="名稱"
-            value={filterCompany}
-            onChange={(val) => {
-              setFilterCompany(val);
-              setPage(1);
-            }}
-            placeholder="請輸入數値"
-          />
+        {/* 篩選列（僅桌機顯示） */}
+        <div className="hidden desktop:block">
+          <div className="flex flex-col gap-[12px] mb-[4px]">
+            <SelectField
+              label="教育程度"
+              value={filterEducation}
+              onChange={(val) => {
+                setFilterEducation(val);
+                setPage(1);
+              }}
+              options={educationLevels}
+              placeholder="請選擇教育程度"
+            />
+            <InputField
+              label="名稱"
+              value={filterCompany}
+              onChange={(val) => {
+                setFilterCompany(val);
+                setPage(1);
+              }}
+              placeholder="請輸入數值"
+            />
+          </div>
         </div>
 
         {/* 卡片列表 */}
