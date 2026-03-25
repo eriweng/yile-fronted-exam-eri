@@ -173,16 +173,31 @@ function App() {
 
   // ── Desktop ───────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Hero */}
-      <div className="h-[480px] w-full bg-gray-500 relative flex-shrink-0">
-        <div className="absolute bottom-4 left-8 bg-gray-400 text-white text-xs px-2 py-1 rounded">
-          Top Work
-        </div>
+    <div className="min-h-screen relative">
+      {/* Hero 圖層（全螢幕固定背景） */}
+      <div className="fixed inset-0 w-full h-full overflow-hidden z-0">
+        {/* 第一層：山景背景 */}
+        <img
+          src="/hero-bg.png"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        {/* 第二層：人物剩影 */}
+        <img
+          src="/hero-silhouette.png"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover mix-blend-normal"
+        />
+        {/* 第三層：漫畫角色 */}
+        <img
+          src="/hero-character.png"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover"
+        />
       </div>
 
-      {/* 內容卡（向上偏移覆蓋 Hero 底部） */}
-      <div className="relative z-10 mx-auto w-[1384px] -mt-[120px] pb-[40px]">
+      {/* 內容卡（mt-28 浮在图層上方） */}
+      <div className="relative z-10 mx-auto mt-28">
         <div className="bg-white rounded-[12px] border border-[1px] border-gray-300 shadow-desktop-card p-[24px] flex flex-col gap-[20px] h-[676px] overflow-hidden">
           {/* 標題列 */}
           <div className="flex items-center gap-[8px]">
