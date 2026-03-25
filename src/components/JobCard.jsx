@@ -74,11 +74,11 @@ export default function JobCard({
         </div>
       </div>
 
-      <p className="w-full text-body-sm text-gray-1000 line-clamp-2 gap-[8px]">
+      <p className="w-full h-[40px] text-body-sm text-gray-1000 line-clamp-2">
         {description}
       </p>
 
-      <div className="text-center font-bold text-orange-700 text-body-sm gap-[8px]">
+      <div className="text-center font-bold text-orange-700 text-body-sm mt-auto">
         查看細節
       </div>
     </div>
