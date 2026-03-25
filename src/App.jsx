@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import JobCard from './components/JobCard';
+import SelectField from './components/SelectField';
+import InputField from './components/InputField';
 import { getJobs, getEducationLevels, getSalaryLevels } from './api';
 
 function App() {
@@ -9,6 +11,8 @@ function App() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1440);
   const [educationLevels, setEducationLevels] = useState([]);
   const [salaryLevels, setSalaryLevels] = useState([]);
+  const [filterEducation, setFilterEducation] = useState('');
+  const [filterCompany, setFilterCompany] = useState('');
 
   useEffect(() => {
     // 取得學歷與薪資等級清單
@@ -27,12 +31,17 @@ function App() {
   }, []);
 
   useEffect(() => {
-    // 取得工作資料
-    getJobs({ pre_page: 4, page }).then((data) => {
+    // 取得工作資料 (包含篩選條件)
+    getJobs({
+      pre_page: 4,
+      page,
+      ...(filterEducation && { education_level: filterEducation }),
+      ...(filterCompany && { company_name: filterCompany }),
+    }).then((data) => {
       setJobs(data.data);
       setTotal(data.total);
     });
-  }, [page]);
+  }, [page, filterEducation, filterCompany]);
 
   // 簡易計算總頁數
   const totalPages = Math.ceil(total / 4) || 6;
@@ -75,6 +84,29 @@ function App() {
           <h2 className="text-display-6 font-bold text-gray-700">
             適合前端工程師的好工作
           </h2>
+        </div>
+
+        {/* 篩選列 */}
+        <div className="flex flex-col gap-[12px] mb-[4px]">
+          <SelectField
+            label="教育程度"
+            value={filterEducation}
+            onChange={(val) => {
+              setFilterEducation(val);
+              setPage(1);
+            }}
+            options={educationLevels}
+            placeholder="請選擇教育程度"
+          />
+          <InputField
+            label="名稱"
+            value={filterCompany}
+            onChange={(val) => {
+              setFilterCompany(val);
+              setPage(1);
+            }}
+            placeholder="請輸入數値"
+          />
         </div>
 
         {/* 卡片列表 */}
