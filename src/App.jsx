@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import JobCard from './components/JobCard';
 import SelectField from './components/SelectField';
 import InputField from './components/InputField';
+import HeroBanner from './components/HeroBanner';
 import { getJobs, getEducationLevels, getSalaryLevels } from './api';
 
 function App() {
@@ -133,11 +134,7 @@ function App() {
     return (
       <div className="mx-auto min-h-screen max-w-[375px] bg-white shadow-xl flex flex-col overflow-hidden">
         {/* Hero */}
-        <div className="h-[200px] w-full bg-gray-500 flex-shrink-0 relative">
-          <div className="absolute top-2 left-2 bg-gray-400 text-white text-xs px-2 py-1 rounded">
-            Mobile
-          </div>
-        </div>
+        <HeroBanner />
 
         {/* 內容區塊 */}
         <div className="p-[16px] mb-[12px] flex flex-col flex-grow gap-[12px] bg-white border-t border-b border-gray-500 shadow-content-card">
@@ -173,31 +170,12 @@ function App() {
 
   // ── Desktop ───────────────────────────────────────────
   return (
-    <div className="min-h-screen relative">
-      {/* Hero 圖層（全螢幕固定背景） */}
-      <div className="fixed inset-0 w-full h-full overflow-hidden z-0">
-        {/* 第一層：山景背景 */}
-        <img
-          src="/hero-bg.png"
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-        {/* 第二層：人物剩影 */}
-        <img
-          src="/hero-silhouette.png"
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover mix-blend-normal"
-        />
-        {/* 第三層：漫畫角色 */}
-        <img
-          src="/hero-character.png"
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-      </div>
+    <div className="min-h-screen bg-gray-200">
+      {/* Hero（等比例縮放，正常文件流） */}
+      <HeroBanner />
 
-      {/* 內容卡（mt-28 浮在图層上方） */}
-      <div className="relative z-10 mx-auto mt-28">
+      {/* 內容卡（Hero 下方浮動） */}
+      <div className="relative z-10 mx-auto -mt-16">
         <div className="bg-white rounded-[12px] border border-[1px] border-gray-300 shadow-desktop-card p-[24px] flex flex-col gap-[20px] h-[676px] overflow-hidden">
           {/* 標題列 */}
           <div className="flex items-center gap-[8px]">
