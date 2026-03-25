@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import JobCard from './components/JobCard';
+import { jobService } from './api';
 
 function App() {
   const [jobs, setJobs] = useState([]);
@@ -12,8 +13,8 @@ function App() {
   useEffect(() => {
     // 取得學歷與薪資等級清單
     Promise.all([
-      fetch('/api/v1/educationLevelList').then((res) => res.json()),
-      fetch('/api/v1/salaryLevelList').then((res) => res.json()),
+      jobService.getEducationLevels(),
+      jobService.getSalaryLevels(),
     ]).then(([eduData, salData]) => {
       setEducationLevels(eduData);
       setSalaryLevels(salData);
@@ -28,12 +29,10 @@ function App() {
 
   useEffect(() => {
     // 取得工作資料
-    fetch(`/api/v1/jobs?pre_page=4&page=${page}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setJobs(data.data);
-        setTotal(data.total);
-      });
+    jobService.getJobs({ pre_page: 4, page }).then((data) => {
+      setJobs(data.data);
+      setTotal(data.total);
+    });
   }, [page]);
 
   // 簡易計算總頁數
