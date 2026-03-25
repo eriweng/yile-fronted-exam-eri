@@ -5,7 +5,7 @@ module.exports = {
     extend: {
       screens: {
         mobile: '375px',
-        desktop: '1440px',
+        desktop: '1279px',
       },
       fontFamily: {
         sans: ['"Noto Sans TC"', 'sans-serif'],

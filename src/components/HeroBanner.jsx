@@ -22,7 +22,6 @@ export default function HeroBanner() {
         position: 'relative',
         width: '100%',
         aspectRatio: '1440 / 823',
-        overflow: 'hidden',
       }}
     >
       {/* 1. 山景背景 */}
@@ -32,12 +31,12 @@ export default function HeroBanner() {
         style={{
           position: 'absolute',
           inset: 0,
-          width: 'auto',
+          width: '100%',
           height: '100%',
           objectFit: 'contain',
+          scale: 1.3,
         }}
       />
-      <div className="relative w-full h-full">
       {/* 2. 人物剪影 */}
       <img
         src={`${BASE}hero-silhouette.png`}
@@ -49,7 +48,6 @@ export default function HeroBanner() {
           width: '76%',
           height: '100%',
           objectFit: 'cover',
-          mixBlendMode: 'multiply',
         }}
       />
 
@@ -59,7 +57,7 @@ export default function HeroBanner() {
         alt="hero-character"
         style={{
           position: 'absolute',
-          zIndex: 50,
+          zIndex: 40,
           left: 0,
           top: 0,
           height: '100%',
@@ -92,37 +90,20 @@ export default function HeroBanner() {
           width: '3.5%',
         }}
       />
-      </div>
 
       {/* 5. Heelco Logo（右側中央，最高層，供動畫控制） */}
       <img
         src={`${BASE}hero-logo.png`}
+        className="animate-scale-pulse"
         alt="hero-logo"
         style={{
           position: 'absolute',
-          zIndex: 30,
+          zIndex: 50,
           right: '5%',
-          top: '22%',
+          bottom: '10%',
           width: '38%',
         }}
       />
-
-      {/* Top Work 標記 */}
-      <span
-        style={{
-          position: 'absolute',
-          bottom: '6%',
-          left: '2%',
-          color: 'white',
-          fontSize: '0.85em',
-          fontWeight: 'bold',
-          opacity: 0.6,
-          zIndex: 10,
-          letterSpacing: '0.05em',
-        }}
-      >
-        Top Work
-      </span>
     </div>
   );
 }
