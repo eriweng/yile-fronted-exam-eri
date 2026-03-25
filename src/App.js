@@ -6,6 +6,19 @@ function App() {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1440);
+  const [educationLevels, setEducationLevels] = useState([]);
+  const [salaryLevels, setSalaryLevels] = useState([]);
+
+  useEffect(() => {
+    // 取得學歷與薪資等級清單
+    Promise.all([
+      fetch('/api/v1/educationLevelList').then((res) => res.json()),
+      fetch('/api/v1/salaryLevelList').then((res) => res.json()),
+    ]).then(([eduData, salData]) => {
+      setEducationLevels(eduData);
+      setSalaryLevels(salData);
+    });
+  }, []);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 1440);
@@ -68,29 +81,37 @@ function App() {
 
         {/* 卡片列表 */}
         <div className="flex flex-col gap-[16px] w-full items-center">
-          {jobs.map((job) => (
-            <JobCard
-              key={job.id}
-              companyName={job.companyName}
-              jobTitle={job.jobTitle}
-              description={job.preview}
-            />
-          ))}
+          {jobs.map((job) => {
+            const eduLabel =
+              educationLevels.find((e) => e.id === job.educationId)?.label ||
+              '不限學歷';
+            const salLabel =
+              salaryLevels.find((s) => s.id === job.salaryId)?.label || '面議';
+
+            return (
+              <JobCard
+                key={job.id}
+                companyName={job.companyName}
+                jobTitle={job.jobTitle}
+                education={eduLabel}
+                salary={salLabel}
+                description={job.preview}
+              />
+            );
+          })}
         </div>
 
         {/* 分頁元件 */}
         <div className="px-[6px] h-[32px] flex justify-center items-center gap-[6px]">
-          {/* 上一頁 — ChevronLeft icon，disabled 時淡化 */}
+          {/* 上一頁 */}
           <button
             disabled={page === 1}
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             className={`w-[32px] h-[32px] flex items-center justify-center rounded-full flex-shrink-0 transition-colors ${
-              page === 1
-                ? 'text-gray-400 cursor-not-allowed'
-                : 'text-gray-600 hover:bg-gray-200'
+              page === 1 ? 'text-gray-700 cursor-not-allowed' : 'text-gray-1000'
             }`}
           >
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
               <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z" />
             </svg>
           </button>
@@ -100,27 +121,25 @@ function App() {
             <button
               key={p}
               onClick={() => setPage(p)}
-              className={`w-[32px] h-[32px] rounded-full flex items-center justify-center text-body-sm flex-shrink-0 text-gray-1000 transition-colors ${
-                page === p
-                  ? 'bg-gray-300 text-gray-1000 font-bold'
-                  : 'text-gray-600 hover:bg-gray-200'
+              className={`w-[32px] h-[32px] rounded-full flex items-center justify-center text-body-sm flex-shrink-0 text-gray-1000 ${
+                page === p ? 'bg-gray-300' : ''
               }`}
             >
               {p}
             </button>
           ))}
 
-          {/* 下一頁 — ChevronRight icon，disabled 時淡化 */}
+          {/* 下一頁 */}
           <button
             disabled={page === totalPages}
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
             className={`w-[32px] h-[32px] flex items-center justify-center rounded-full flex-shrink-0 transition-colors ${
               page === totalPages
                 ? 'text-gray-400 cursor-not-allowed'
-                : 'text-gray-600 hover:bg-gray-200'
+                : 'text-gray-1000'
             }`}
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
               <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z" />
             </svg>
           </button>
