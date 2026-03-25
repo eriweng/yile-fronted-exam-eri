@@ -12,11 +12,9 @@ const apiClient = axios.create({
 // 定義 HTTP 狀態碼處理方式 (攔截器)
 apiClient.interceptors.response.use(
   (response) => {
-    // 2xx 範圍內的狀態碼都會觸發此函式
     return response.data;
   },
   (error) => {
-    // 超出 2xx 範圍的狀態碼都會觸發此函式
     if (error.response) {
       const { status } = error.response;
       switch (status) {
@@ -48,31 +46,29 @@ apiClient.interceptors.response.use(
 );
 
 // 封裝各個 API 呼叫
-export const jobService = {
-  /**
-   * 取得工作列表
-   * @param {Object} params - 查詢參數 (pre_page, page)
-   * @return {Promise}
-   */
-  getJobs(params) {
-    return apiClient.get('/jobs', { params });
-  },
+/**
+ * 取得工作列表
+ * @param {Object} params - 查詢參數 (pre_page, page)
+ * @return {Promise}
+ */
+export const getJobs = (params) => {
+  return apiClient.get('/jobs', { params });
+};
 
-  /**
-   * 取得學歷等級列表
-   * @return {Promise}
-   */
-  getEducationLevels() {
-    return apiClient.get('/educationLevelList');
-  },
+/**
+ * 取得學歷等級列表
+ * @return {Promise}
+ */
+export const getEducationLevels = () => {
+  return apiClient.get('/educationLevelList');
+};
 
-  /**
-   * 取得薪資等級列表
-   * @return {Promise}
-   */
-  getSalaryLevels() {
-    return apiClient.get('/salaryLevelList');
-  },
+/**
+ * 取得薪資等級列表
+ * @return {Promise}
+ */
+export const getSalaryLevels = () => {
+  return apiClient.get('/salaryLevelList');
 };
 
 export default apiClient;

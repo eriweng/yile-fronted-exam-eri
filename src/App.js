@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import JobCard from './components/JobCard';
-import { jobService } from './api';
+import { getJobs, getEducationLevels, getSalaryLevels } from './api';
 
 function App() {
   const [jobs, setJobs] = useState([]);
@@ -12,13 +12,12 @@ function App() {
 
   useEffect(() => {
     // 取得學歷與薪資等級清單
-    Promise.all([
-      jobService.getEducationLevels(),
-      jobService.getSalaryLevels(),
-    ]).then(([eduData, salData]) => {
-      setEducationLevels(eduData);
-      setSalaryLevels(salData);
-    });
+    Promise.all([getEducationLevels(), getSalaryLevels()]).then(
+      ([eduData, salData]) => {
+        setEducationLevels(eduData);
+        setSalaryLevels(salData);
+      },
+    );
   }, []);
 
   useEffect(() => {
@@ -29,7 +28,7 @@ function App() {
 
   useEffect(() => {
     // 取得工作資料
-    jobService.getJobs({ pre_page: 4, page }).then((data) => {
+    getJobs({ pre_page: 4, page }).then((data) => {
       setJobs(data.data);
       setTotal(data.total);
     });
