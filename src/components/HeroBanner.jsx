@@ -13,15 +13,35 @@
  *  5. hero-logo.png       — Heelco Logo（右側，z-30，供動畫）
  */
 
+import { useState, useEffect } from 'react';
+
 const BASE = import.meta.env.BASE_URL;
 
 export default function HeroBanner() {
+  const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      // 以視窗中心點為基準計算偏移量
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+
+      // 微幅移動控制 (最大約 ±8px)
+      const moveX = ((e.clientX - centerX) / centerX) * 8;
+      const moveY = ((e.clientY - centerY) / centerY) * 5;
+
+      setMouseOffset({ x: moveX, y: moveY });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
   return (
     <div
       style={{
         position: 'relative',
         width: '100%',
-        aspectRatio: '1440 / 823',
       }}
     >
       {/* 1. 山景背景 */}
@@ -32,66 +52,75 @@ export default function HeroBanner() {
           position: 'absolute',
           inset: 0,
           width: '100%',
-          height: '100%',
-          objectFit: 'contain',
-          scale: 1.3,
-        }}
-      />
-      {/* 2. 人物剪影 */}
-      <img
-        src={`${BASE}hero-silhouette.png`}
-        alt="hero-silhouette"
-        style={{
-          position: 'absolute',
-          inset: 0,
-          left: '0%',
-          width: '76%',
-          height: '100%',
           objectFit: 'cover',
         }}
       />
-
-      {/* 3. 漫畫角色（左側，保持原始比例，佔高 120%，從頂部溢出有裁切效果） */}
-      <img
-        src={`${BASE}hero-character.png`}
-        alt="hero-character"
+      <div
         style={{
-          position: 'absolute',
-          zIndex: 40,
-          left: 0,
-          top: 0,
-          height: '100%',
-          width: 'auto',
-          objectFit: 'contain',
-          objectPosition: 'left top',
+          position: 'relative',
+          width: '100%',
+          aspectRatio: '1440 / 823',
         }}
-      />
+      >
+        {/* 2. 人物剪影 */}
+        <img
+          src={`${BASE}hero-silhouette.png`}
+          alt="hero-silhouette"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            left: '0%',
+            width: '76%',
+            height: '100%',
+            objectFit: 'cover',
+          }}
+        />
 
-      {/* 4. 眼睛（最高層，供動畫控制） */}
-      <img
-        src={`${BASE}hero-eye-left.png`}
-        alt="hero-eye-left"
-        style={{
-          position: 'absolute',
-          zIndex: 30,
-          left: '40%',
-          top: '37%',
-          width: '3.5%',
-        }}
-      />
-      <img
-        src={`${BASE}hero-eye-right.png`}
-        alt="hero-eye-right"
-        style={{
-          position: 'absolute',
-          zIndex: 30,
-          left: '50%',
-          top: '36.5%',
-          width: '3.5%',
-        }}
-      />
+        {/* 3. 漫畫角色 */}
+        <img
+          src={`${BASE}hero-character.png`}
+          alt="hero-character"
+          style={{
+            position: 'absolute',
+            zIndex: 40,
+            left: 0,
+            top: 0,
+            height: '100%',
+            width: 'auto',
+            objectFit: 'contain',
+            objectPosition: 'left top',
+          }}
+        />
 
-      {/* 5. Heelco Logo（右側中央，最高層，供動畫控制） */}
+        {/* 4. 眼睛（隨滑鼠座標微幅移動） */}
+        <img
+          src={`${BASE}hero-eye-left.png`}
+          alt="hero-eye-left"
+          style={{
+            position: 'absolute',
+            zIndex: 30,
+            left: '40%',
+            top: '37%',
+            width: '3.5%',
+            transform: `translate(${mouseOffset.x}px, ${mouseOffset.y}px)`,
+            transition: 'transform 0.1s ease-out',
+          }}
+        />
+        <img
+          src={`${BASE}hero-eye-right.png`}
+          alt="hero-eye-right"
+          style={{
+            position: 'absolute',
+            zIndex: 30,
+            left: '50%',
+            top: '36.5%',
+            width: '3.5%',
+            transform: `translate(${mouseOffset.x}px, ${mouseOffset.y}px)`,
+            transition: 'transform 0.1s ease-out',
+          }}
+        />
+      </div>
+      {/* 5. Heelco Logo */}
       <img
         src={`${BASE}hero-logo.png`}
         className="animate-scale-pulse"
