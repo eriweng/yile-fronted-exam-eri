@@ -182,8 +182,8 @@ function App() {
       </div>
 
       {/* 內容卡（向上偏移覆蓋 Hero 底部） */}
-      <div className="relative z-10 mx-auto max-w-[1024px] -mt-[120px] pb-[40px] px-4">
-        <div className="bg-white rounded-[6px] shadow-content-card p-[24px] flex flex-col gap-[16px]">
+      <div className="relative z-10 mx-auto w-[1384px] -mt-[120px] pb-[40px]">
+        <div className="bg-white rounded-[12px] border border-[1px] border-gray-300 shadow-desktop-card p-[24px] flex flex-col gap-[20px] h-[676px] overflow-hidden">
           {/* 標題列 */}
           <div className="flex items-center gap-[8px]">
             <div className="h-[20px] w-[4px] rounded bg-orange-500" />
@@ -229,28 +229,30 @@ function App() {
           </div>
 
           {/* 卡片格 */}
-          {jobs.length === 0 ? (
-            <div className="h-[300px] flex items-center justify-center text-gray-600 text-body-sm">
-              無資料
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 gap-[16px]">
-              {jobs.map((job) => (
-                <JobCard
-                  key={job.id}
-                  companyName={job.companyName}
-                  jobTitle={job.jobTitle}
-                  education={getLabel(
-                    educationLevels,
-                    job.educationId,
-                    '不限學歷',
-                  )}
-                  salary={getLabel(salaryLevels, job.salaryId, '面議')}
-                  description={job.preview}
-                />
-              ))}
-            </div>
-          )}
+          <div className="h-[502px] overflow-auto">
+            {jobs.length === 0 ? (
+              <div className="h-full flex items-center justify-center text-gray-600 text-body-sm">
+                無資料
+              </div>
+            ) : (
+              <div className="grid grid-cols-3 gap-[12px]">
+                {jobs.map((job) => (
+                  <JobCard
+                    key={job.id}
+                    companyName={job.companyName}
+                    jobTitle={job.jobTitle}
+                    education={getLabel(
+                      educationLevels,
+                      job.educationId,
+                      '不限學歷',
+                    )}
+                    salary={getLabel(salaryLevels, job.salaryId, '面議')}
+                    description={job.preview}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
 
           <Pagination />
         </div>

@@ -81,6 +81,7 @@ module.exports = {
       boxShadow: {
         'custom-glow': '0 0 8px 0 rgba(0, 0, 0, 0.35)',
         'content-card': '2px 2px 4px 0px rgba(0, 0, 0, 0.25)',
+        'desktop-card': '2px 2px 4px 0px #00000040',
       },
     },
   },
