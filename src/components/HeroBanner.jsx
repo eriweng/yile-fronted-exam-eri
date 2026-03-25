@@ -21,31 +21,32 @@ export default function HeroBanner() {
       style={{
         position: 'relative',
         width: '100%',
-        aspectRatio: '1440 / 560',
+        aspectRatio: '1440 / 823',
         overflow: 'hidden',
       }}
     >
       {/* 1. 山景背景 */}
       <img
         src={`${BASE}hero-bg.png`}
-        alt=""
+        alt="hero-bg"
         style={{
           position: 'absolute',
           inset: 0,
-          width: '100%',
+          width: 'auto',
           height: '100%',
-          objectFit: 'cover',
+          objectFit: 'contain',
         }}
       />
-
+      <div className="relative w-full h-full">
       {/* 2. 人物剪影 */}
       <img
         src={`${BASE}hero-silhouette.png`}
-        alt=""
+        alt="hero-silhouette"
         style={{
           position: 'absolute',
           inset: 0,
-          width: '100%',
+          left: '0%',
+          width: '76%',
           height: '100%',
           objectFit: 'cover',
           mixBlendMode: 'multiply',
@@ -55,12 +56,13 @@ export default function HeroBanner() {
       {/* 3. 漫畫角色（左側，保持原始比例，佔高 120%，從頂部溢出有裁切效果） */}
       <img
         src={`${BASE}hero-character.png`}
-        alt=""
+        alt="hero-character"
         style={{
           position: 'absolute',
+          zIndex: 50,
           left: 0,
           top: 0,
-          height: '120%',
+          height: '100%',
           width: 'auto',
           objectFit: 'contain',
           objectPosition: 'left top',
@@ -70,31 +72,32 @@ export default function HeroBanner() {
       {/* 4. 眼睛（最高層，供動畫控制） */}
       <img
         src={`${BASE}hero-eye-left.png`}
-        alt=""
+        alt="hero-eye-left"
         style={{
           position: 'absolute',
           zIndex: 30,
-          left: '18.5%',
-          top: '36%',
+          left: '40%',
+          top: '37%',
           width: '3.5%',
         }}
       />
       <img
         src={`${BASE}hero-eye-right.png`}
-        alt=""
+        alt="hero-eye-right"
         style={{
           position: 'absolute',
           zIndex: 30,
-          left: '23%',
-          top: '36%',
+          left: '50%',
+          top: '36.5%',
           width: '3.5%',
         }}
       />
+      </div>
 
       {/* 5. Heelco Logo（右側中央，最高層，供動畫控制） */}
       <img
         src={`${BASE}hero-logo.png`}
-        alt="Heelco"
+        alt="hero-logo"
         style={{
           position: 'absolute',
           zIndex: 30,

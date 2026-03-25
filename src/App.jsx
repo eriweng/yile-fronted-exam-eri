@@ -170,12 +170,17 @@ function App() {
 
   // ── Desktop ───────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-gray-200">
+    <div
+      className="min-h-screen"
+      style={{
+        background: 'linear-gradient(90.51deg, #868686 1.54%, #5C5C5C 101.46%)',
+      }}
+    >
       {/* Hero（等比例縮放，正常文件流） */}
       <HeroBanner />
 
       {/* 內容卡（Hero 下方浮動） */}
-      <div className="relative z-10 mx-auto -mt-16">
+      <div className="relative z-99 mx-[28px] mb-[28px]">
         <div className="bg-white rounded-[12px] border border-[1px] border-gray-300 shadow-desktop-card p-[24px] flex flex-col gap-[20px] h-[676px] overflow-hidden">
           {/* 標題列 */}
           <div className="flex items-center gap-[8px]">
