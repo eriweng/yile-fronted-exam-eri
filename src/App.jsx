@@ -81,10 +81,12 @@ function App() {
         <div className="flex flex-col gap-[16px] w-full items-center">
           {jobs.map((job) => {
             const eduLabel =
-              educationLevels.find((e) => e.id === job.educationId)?.label ||
-              '不限學歷';
+              educationLevels.find(
+                (e) => Number(e.id) === Number(job.educationId),
+              )?.label || '不限學歷';
             const salLabel =
-              salaryLevels.find((s) => s.id === job.salaryId)?.label || '面議';
+              salaryLevels.find((s) => Number(s.id) === Number(job.salaryId))
+                ?.label || '面議';
 
             return (
               <JobCard
