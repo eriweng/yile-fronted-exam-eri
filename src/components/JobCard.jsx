@@ -1,51 +1,17 @@
 import React from 'react';
 
+const BASE = import.meta.env.BASE_URL;
+
 const PersonIcon = () => (
-  <svg
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="#808080"
-    strokeWidth="1.2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-    <circle cx="12" cy="7" r="4"></circle>
-  </svg>
+  <img src={`${BASE}person-outline.png`} className="w-[18px] h-[18px]" alt="" />
 );
 
 const BookIcon = () => (
-  <svg
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="#808080"
-    strokeWidth="1.2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-  </svg>
+  <img src={`${BASE}book-outline.png`} className="w-[18px] h-[18px]" alt="" />
 );
 
 const MoneyIcon = () => (
-  <svg
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="#808080"
-    strokeWidth="1.2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M12 1v22"></path>
-    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-  </svg>
+  <img src={`${BASE}coin-outline.png`} className="w-[18px] h-[18px]" alt="" />
 );
 
 export default function JobCard({
@@ -62,15 +28,15 @@ export default function JobCard({
       <div className="flex flex-col gap-[8px]">
         <div className="flex items-center gap-[6px] text-gray-800 text-body-sm">
           <PersonIcon />
-          <span>{jobTitle}</span>
+          <span className="items-center">{jobTitle}</span>
         </div>
         <div className="flex items-center gap-[6px] text-gray-800 text-body-sm">
           <BookIcon />
-          <span>{education}</span>
+          <span className="items-center">{education}</span>
         </div>
         <div className="flex items-center gap-[6px] text-gray-800 text-body-sm">
           <MoneyIcon />
-          <span>{salary}</span>
+          <span className="items-center -ml-[1px]">{salary}</span>
         </div>
       </div>
 

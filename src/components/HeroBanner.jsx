@@ -1,36 +1,18 @@
-/**
- * HeroBanner — 等比例縮放 Hero 組件
- *
- * 設計畫布：1440 × 560 px
- * 利用 aspect-ratio 使容器跟隨寬度縮放，
- * 所有子元素以百分比定位，確保各尺寸下比例一致。
- *
- * 圖層順序（由下至上）：
- *  1. hero-bg.png        — 山景背景（全覆）
- *  2. hero-silhouette.png — 人物剪影（multiply 混合）
- *  3. hero-character.png  — 漫畫角色（左側）
- *  4. hero-eye-left / right — 眼睛（z-30，供動畫）
- *  5. hero-logo.png       — Heelco Logo（右側，z-30，供動畫）
- */
-
 import { useState, useEffect } from 'react';
 
 const BASE = import.meta.env.BASE_URL;
 
 export default function HeroBanner() {
-  const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
+  const [mouseOffset, setMouseOffset] = useState({ x: 0 });
 
   useEffect(() => {
     const handleMouseMove = (e) => {
       // 以視窗中心點為基準計算偏移量
       const centerX = window.innerWidth / 2;
-      const centerY = window.innerHeight / 2;
 
-      // 微幅移動控制 (最大約 ±8px)
-      const moveX = ((e.clientX - centerX) / centerX) * 8;
-      const moveY = ((e.clientY - centerY) / centerY) * 5;
-
-      setMouseOffset({ x: moveX, y: moveY });
+      // 微幅移動控制
+      const moveX = ((e.clientX - centerX) / centerX) * 4;
+      setMouseOffset({ x: moveX });
     };
 
     window.addEventListener('mousemove', handleMouseMove);
@@ -102,7 +84,7 @@ export default function HeroBanner() {
             left: '40%',
             top: '37%',
             width: '3.5%',
-            transform: `translate(${mouseOffset.x}px, ${mouseOffset.y}px)`,
+            transform: `translateX(${mouseOffset.x}px)`,
             transition: 'transform 0.1s ease-out',
           }}
         />
@@ -115,7 +97,7 @@ export default function HeroBanner() {
             left: '50%',
             top: '36.5%',
             width: '3.5%',
-            transform: `translate(${mouseOffset.x}px, ${mouseOffset.y}px)`,
+            transform: `translateX(${mouseOffset.x}px)`,
             transition: 'transform 0.1s ease-out',
           }}
         />

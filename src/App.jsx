@@ -24,7 +24,7 @@ function App() {
   const [filterSalary, setFilterSalary] = useState('');
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 1440);
+    const handleResize = () => setIsMobile(window.innerWidth < 1280);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -39,7 +39,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const perPage = isMobile ? 4 : 8;
+    // const perPage = isMobile ? 4 : 6;
     getJobs({
       pre_page: perPage,
       page,
@@ -52,7 +52,7 @@ function App() {
     });
   }, [page, filterEducation, filterCompany, filterSalary, isMobile]);
 
-  const perPage = isMobile ? 4 : 8;
+  const perPage = isMobile ? 4 : 6;
   const totalPages = Math.ceil(total / perPage) || 1;
 
   const getPageNumbers = () => {
@@ -76,7 +76,7 @@ function App() {
     setFilterSalary(draftSalary);
     setPage(1);
   };
-
+  // ── 取得職業、薪水內容 ─────────────────────────────────────────
   const getLabel = (list, id, fallback) =>
     list.find((item) => Number(item.id) === Number(id))?.label || fallback;
 
@@ -111,6 +111,7 @@ function App() {
     </button>
   );
 
+  // ── 分頁元件 ─────────────────────────────────────────
   const Pagination = () => (
     <div className="px-[6px] h-[32px] flex justify-center items-center gap-[6px]">
       <PrevBtn />
@@ -192,13 +193,13 @@ function App() {
             </div>
 
             {/* 篩選列 */}
-            <div className="flex items-center gap-[12px]">
+            <div className="flex items-center gap-[18px]">
               <div className="flex-1">
                 <InputField
                   label="公司名稱"
                   value={draftCompany}
                   onChange={setDraftCompany}
-                  placeholder="請輸入公司名稱"
+                  placeholder="請輸入公司名稱" 
                 />
               </div>
               <div className="w-[200px]">
@@ -208,7 +209,7 @@ function App() {
                   onChange={setDraftEducation}
                   options={educationLevels}
                   placeholder="不限"
-                />
+                /> 
               </div>
               <div className="w-[200px]">
                 <SelectField
@@ -221,7 +222,7 @@ function App() {
               </div>
               <button
                 onClick={handleSearch}
-                className="h-[56px] px-[24px] bg-gray-700 hover:bg-gray-900 text-white text-body-sm font-bold rounded-[6px] flex-shrink-0 transition-colors"
+                className="h-[56px] px-[24px] bg-gray-700 hover:bg-gray-800 text-gray-100 text-body-sm font-bold rounded-[6px] flex-shrink-0 transition-colors"
               >
                 條件搜尋
               </button>
@@ -230,7 +231,7 @@ function App() {
             {/* 卡片格 */}
             <div className="h-[502px] overflow-auto">
               {jobs.length === 0 ? (
-                <div className="h-full flex items-center justify-center text-gray-600 text-body-sm">
+                <div className="h-full flex items-center justify-center text-gray-700 text-body-lg border border-[1px] border-gray-500 rounded-[6px]">
                   無資料
                 </div>
               ) : (

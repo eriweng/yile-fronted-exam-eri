@@ -13,26 +13,34 @@ export default function InputField({ label, value, onChange, placeholder }) {
       value={value}
       placeholder={placeholder}
       onChange={(e) => onChange(e.target.value)}
+      InputLabelProps={{
+        shrink: true,
+        fontSize: '12px',
+      }}
       sx={{
         '& .MuiOutlinedInput-root': {
           borderRadius: '6px',
           fontSize: '16px',
-          color: '#4d4d4d',
+          color: 'var(--gray-1000)',
         },
         '& .MuiInputLabel-root': {
-          fontSize: '12px',
-          color: '#808080',
+          color: 'var(--gray-1000)',
+          backgroundColor: 'white',
+        },
+        '& input::placeholder': {
+          color: 'var(--gray-1000)',
+          opacity: 1,
         },
         '& .MuiInputLabel-root.Mui-focused': {
-          color: '#808080',
+          color: 'var(--gray-1000)',
         },
         '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline':
           {
-            borderColor: '#d4d4d4',
+            borderColor: 'var(--gray-500)',
             borderWidth: '1px',
           },
         '& .MuiOutlinedInput-notchedOutline': {
-          borderColor: '#d4d4d4',
+          borderColor: 'var(--gray-500)',
         },
       }}
     />

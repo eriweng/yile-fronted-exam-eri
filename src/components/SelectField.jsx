@@ -19,29 +19,32 @@ export default function SelectField({
       variant="outlined"
       fullWidth
       sx={{
-        '& .MuiOutlinedInput-root': {
-          borderRadius: '6px',
-          fontSize: '16px',
-          color: '#4d4d4d',
-        },
         '& .MuiInputLabel-root': {
           fontSize: '12px',
-          color: '#808080',
+          color: 'var(--gray-1000)',
+          backgroundColor: 'var(--gray-100)', // 重要：遮住邊框
+          padding: '0 6px', // 增加一點水平間距，更像 Figma
+          marginLeft: '-4px', // 微調對齊
+        },
+        '& .MuiInputLabel-shrink': {
+          transform: 'translate(14px, -9px) scale(1)',
         },
         '& .MuiInputLabel-root.Mui-focused': {
-          color: '#808080',
+          color: 'var(--gray-1000)',
         },
         '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline':
           {
-            borderColor: '#d4d4d4',
+            borderColor: 'var(--gray-500)',
             borderWidth: '1px',
           },
         '& .MuiOutlinedInput-notchedOutline': {
-          borderColor: '#d4d4d4',
+          borderColor: 'var(--gray-500)',
         },
       }}
     >
-      <InputLabel id={`${label}-label`}>{label}</InputLabel>
+      <InputLabel id={`${label}-label`} shrink>
+        {label}
+      </InputLabel>
       <MuiSelect
         labelId={`${label}-label`}
         id={`${label}-select`}
@@ -50,11 +53,10 @@ export default function SelectField({
         onChange={(e) => onChange(e.target.value)}
         displayEmpty
       >
-        {placeholder && (
-          <MenuItem value="">
-            <span style={{ color: '#808080' }}>{placeholder}</span>
-          </MenuItem>
-        )}
+        <MenuItem value="">
+          <span style={{ color: 'var(--gray-1000)' }}>{placeholder}</span>
+        </MenuItem>
+
         {options.map((opt) => (
           <MenuItem key={opt.id} value={opt.id}>
             {opt.label}

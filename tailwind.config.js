@@ -3,10 +3,6 @@ module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
-      screens: {
-        mobile: '375px',
-        desktop: '1279px',
-      },
       fontFamily: {
         sans: ['"Noto Sans TC"', 'sans-serif'],
       },
