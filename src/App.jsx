@@ -86,10 +86,10 @@ function App() {
 
   const visiblePages = getPageNumbers();
 
-  const handleSearch = () => {
-    setFilterCompany(draftCompany);
-    setFilterEducation(draftEducation);
-    setFilterSalary(draftSalary);
+  const handleClear = () => {
+    setDraftCompany('');
+    setDraftEducation('');
+    setDraftSalary('');
     setPage(1);
   };
   // ── 取得職業、薪水內容 ─────────────────────────────────────────
@@ -237,10 +237,10 @@ function App() {
                 />
               </div>
               <button
-                onClick={handleSearch}
-                className="h-[56px] px-[24px] bg-gray-700 hover:bg-gray-800 text-gray-100 text-body-sm font-bold rounded-[6px] flex-shrink-0 transition-colors"
+                onClick={handleClear}
+                className="h-[56px] px-[24px] bg-gray-500 hover:bg-gray-600 text-gray-100 text-body-sm font-bold rounded-[6px] flex-shrink-0 transition-colors"
               >
-                條件搜尋
+                條件清除
               </button>
             </div>
 
