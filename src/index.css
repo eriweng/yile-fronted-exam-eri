@@ -54,7 +54,7 @@
     --gray-600: #737373;
     --gray-700: #999999;
     --gray-800: #808080;
-    --gray-900: #666666;
+    --gray-900: #262626;
     --gray-1000: #4d4d4d;
     --gray-1100: #121212;
     --gray-1200: #0a0a0a;
@@ -95,20 +95,5 @@
     --red-1300: #240e0b;
     --red-1400: #170907;
     --red-1500: #0a0403;
-  }
-}
-@layer utilities {
-  @keyframes scale-pulse {
-    0%,
-    100% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.05);
-    }
-  }
-
-  .animate-scale-pulse {
-    animation: scale-pulse 1.5s ease-in-out infinite;
   }
 }

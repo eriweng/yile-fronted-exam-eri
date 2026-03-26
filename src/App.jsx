@@ -47,7 +47,6 @@ function App() {
   }, [draftEducation, draftSalary]);
 
   useEffect(() => {
-    // 公司名稱防抖處理 (500ms)，並重置分頁
     const timer = setTimeout(() => {
       setFilterCompany(draftCompany);
       setPage(1);
@@ -57,7 +56,6 @@ function App() {
   }, [draftCompany]);
 
   useEffect(() => {
-    // const perPage = isMobile ? 4 : 6;
     getJobs({
       pre_page: perPage,
       page,
