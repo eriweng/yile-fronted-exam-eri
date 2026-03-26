@@ -38,6 +38,24 @@ function App() {
     );
   }, []);
 
+  // ── 監聽篩選條件變化（即時搜尋） ─────────────────────────────────────────
+  useEffect(() => {
+    // 學歷與薪水即時更新，並重置分頁
+    setFilterEducation(draftEducation);
+    setFilterSalary(draftSalary);
+    setPage(1);
+  }, [draftEducation, draftSalary]);
+
+  useEffect(() => {
+    // 公司名稱防抖處理 (500ms)，並重置分頁
+    const timer = setTimeout(() => {
+      setFilterCompany(draftCompany);
+      setPage(1);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [draftCompany]);
+
   useEffect(() => {
     // const perPage = isMobile ? 4 : 6;
     getJobs({
