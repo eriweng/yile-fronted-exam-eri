@@ -3,7 +3,7 @@ import JobCard from './components/JobCard';
 import SelectField from './components/SelectField';
 import InputField from './components/InputField';
 import HeroBanner from './components/HeroBanner';
-import JobDetailModal from './components/JobDetailModal';
+import JobDetailsModal from './components/JobDetailsModal';
 import { getJobs, getEducationLevels, getSalaryLevels } from './api';
 
 function App() {
@@ -13,7 +13,7 @@ function App() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1440);
   const [educationLevels, setEducationLevels] = useState([]);
   const [salaryLevels, setSalaryLevels] = useState([]);
-  const [selectedJob, setSelectedJob] = useState(null);
+  const [selectedJobDetails, setSelectedJobDetails] = useState(null);
 
   // 篩選暫存值（桌機點搜尋才套用）
   const [draftCompany, setDraftCompany] = useState('');
@@ -168,14 +168,15 @@ function App() {
             {jobs.map((job) => (
               <JobCard
                 key={job.id}
-                job={job}
+                companyName={job.companyName}
+                jobTitle={job.jobTitle}
                 education={getLabel(
                   educationLevels,
                   job.educationId,
                   '不限學歷',
                 )}
                 salary={getLabel(salaryLevels, job.salaryId, '面議')}
-                onViewDetails={setSelectedJob}
+                description={job.preview}
               />
             ))}
           </div>
@@ -256,14 +257,20 @@ function App() {
                   {jobs.map((job) => (
                     <JobCard
                       key={job.id}
-                      job={job}
+                      companyName={job.companyName}
+                      jobTitle={job.jobTitle}
                       education={getLabel(
                         educationLevels,
                         job.educationId,
                         '不限學歷',
                       )}
                       salary={getLabel(salaryLevels, job.salaryId, '面議')}
-                      onViewDetails={setSelectedJob}
+                      description={job.preview}
+                      onClick={() => setSelectedJobDetails({
+                        companyName: job.companyName,
+                        jobTitle: job.jobTitle,
+                        description: job.description || job.preview || '無詳細工作內容',
+                      })}
                     />
                   ))}
                 </div>
@@ -274,10 +281,11 @@ function App() {
           </div>
         </div>
       </div>
-      {selectedJob && (
-        <JobDetailModal
-          job={selectedJob}
-          onClose={() => setSelectedJob(null)}
+
+      {selectedJobDetails && (
+        <JobDetailsModal
+          job={selectedJobDetails}
+          onClose={() => setSelectedJobDetails(null)}
         />
       )}
     </>

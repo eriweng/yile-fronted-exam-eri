@@ -13,19 +13,19 @@ const MoneyIcon = () => (
 );
 
 export default function JobCard({
-  job,
+  companyName,
+  jobTitle,
   education,
   salary,
-  onViewDetails,
+  description,
+  onClick,
 }) {
-  const { companyName, jobTitle, preview } = job;
-  
   return (
-    <div 
-      className="flex flex-col w-full min-h-[220px] rounded-[6px] border border-[1px] border-gray-500 p-[16px] gap-[10px] bg-white hover:shadow-custom-glow transition-shadow duration-200 cursor-pointer group"
-      onClick={() => onViewDetails?.(job)}
+    <div
+      onClick={onClick}
+      className="flex flex-col w-full min-h-[220px] rounded-[6px] border border-[1px] border-gray-500 p-[16px] gap-[10px] bg-white hover:shadow-custom-glow transition-shadow duration-200 cursor-pointer"
     >
-      <h5 className="text-display-5 font-bold text-gray-1000 group-hover:text-[#ee8927] transition-colors">{companyName}</h5>
+      <h5 className="text-display-5 font-bold text-gray-1000">{companyName}</h5>
 
       <div className="flex flex-col gap-[8px]">
         <div className="flex items-center gap-[6px] text-gray-800 text-body-sm">
@@ -43,11 +43,11 @@ export default function JobCard({
       </div>
 
       <p className="w-full h-[40px] text-body-sm text-gray-1000 line-clamp-2">
-        {preview}
+        {description}
       </p>
 
-      <div className="text-center font-bold text-[#ee8927] text-body-sm mt-auto group-hover:underline decoration-2 underline-offset-4">
-        查看細節內容及組件更新
+      <div className="text-center font-bold text-orange-700 text-body-sm mt-auto">
+        查看細節
       </div>
     </div>
   );
