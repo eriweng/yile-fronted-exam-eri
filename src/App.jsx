@@ -3,6 +3,7 @@ import JobCard from './components/JobCard';
 import SelectField from './components/SelectField';
 import InputField from './components/InputField';
 import HeroBanner from './components/HeroBanner';
+import JobDetailModal from './components/JobDetailModal';
 import { getJobs, getEducationLevels, getSalaryLevels } from './api';
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1440);
   const [educationLevels, setEducationLevels] = useState([]);
   const [salaryLevels, setSalaryLevels] = useState([]);
+  const [selectedJob, setSelectedJob] = useState(null);
 
   // 篩選暫存值（桌機點搜尋才套用）
   const [draftCompany, setDraftCompany] = useState('');
@@ -156,7 +158,7 @@ function App() {
         {/* 內容區塊 */}
         <div className="p-[16px] mb-[12px] flex flex-col flex-grow gap-[12px] bg-white border-t border-b border-gray-500 shadow-content-card">
           <div className="flex items-center self-start gap-[8px] mb-[4px]">
-            <div className="h-[20px] w-[4px] rounded bg-orange-500" />
+            <div className="h-[16px] w-[4px] rounded bg-orange-700" />
             <h2 className="text-display-6 font-bold text-gray-700">
               適合前端工程師的好工作
             </h2>
@@ -166,15 +168,14 @@ function App() {
             {jobs.map((job) => (
               <JobCard
                 key={job.id}
-                companyName={job.companyName}
-                jobTitle={job.jobTitle}
+                job={job}
                 education={getLabel(
                   educationLevels,
                   job.educationId,
                   '不限學歷',
                 )}
                 salary={getLabel(salaryLevels, job.salaryId, '面議')}
-                description={job.preview}
+                onViewDetails={setSelectedJob}
               />
             ))}
           </div>
@@ -202,7 +203,7 @@ function App() {
           <div className="bg-white rounded-[12px] border border-[1px] border-gray-300 shadow-desktop-card p-[24px] flex flex-col gap-[20px] h-[676px] overflow-hidden">
             {/* 標題列 */}
             <div className="flex items-center gap-[8px]">
-              <div className="h-[20px] w-[4px] rounded bg-orange-500" />
+              <div className="h-[16px] w-[4px] rounded bg-orange-700" />
               <h2 className="text-display-6 font-bold text-gray-700">
                 適合前端工程師的好工作
               </h2>
@@ -238,7 +239,7 @@ function App() {
               </div>
               <button
                 onClick={handleClear}
-                className="h-[56px] px-[24px] bg-gray-500 hover:bg-gray-600 text-gray-100 text-body-sm font-bold rounded-[6px] flex-shrink-0 transition-colors"
+                className="h-[56px] px-[24px] bg-gray-700 hover:bg-gray-800 text-gray-100 text-body-lg rounded-[6px] flex-shrink-0 transition-colors"
               >
                 條件清除
               </button>
@@ -255,15 +256,14 @@ function App() {
                   {jobs.map((job) => (
                     <JobCard
                       key={job.id}
-                      companyName={job.companyName}
-                      jobTitle={job.jobTitle}
+                      job={job}
                       education={getLabel(
                         educationLevels,
                         job.educationId,
                         '不限學歷',
                       )}
                       salary={getLabel(salaryLevels, job.salaryId, '面議')}
-                      description={job.preview}
+                      onViewDetails={setSelectedJob}
                     />
                   ))}
                 </div>
@@ -274,6 +274,12 @@ function App() {
           </div>
         </div>
       </div>
+      {selectedJob && (
+        <JobDetailModal
+          job={selectedJob}
+          onClose={() => setSelectedJob(null)}
+        />
+      )}
     </>
   );
 }
