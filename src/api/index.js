@@ -45,7 +45,6 @@ apiClient.interceptors.response.use(
   },
 );
 
-// 封裝各個 API 呼叫
 
 /** @param {{ pre_page: number, page: number }} params */
 export const getJobs = (params) => apiClient.get('/jobs', { params });

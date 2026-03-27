@@ -41,7 +41,7 @@ export default function JobCard({
         {description}
       </p>
       <div
-        className="text-center font-bold text-orange-700 text-body-sm mt-auto cursor-pointer hover:text-orange-400 transition-colors transform hover:scale-110 duration-300 smooth-in ease-out"
+        className="text-center font-bold text-orange-700 text-body-sm mt-auto cursor-pointer transform hover:scale-110 duration-500 ease-in"
         onClick={onClick}
       >
         查看細節

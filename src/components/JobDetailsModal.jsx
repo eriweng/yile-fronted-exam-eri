@@ -12,6 +12,8 @@ export default function JobDetailsModal({ job, onClose }) {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const carouselRef = useRef(null);
+  // 每個 slide 的 ref，用於精準 scrollIntoView
+  const slideRefs = useRef([]);
 
   // ── 拖曳與滾動邏輯 (僅在有圖片時啟用) ─────────────────────────────
   const [isDragging, setIsDragging] = useState(false);
@@ -36,25 +38,35 @@ export default function JobDetailsModal({ job, onClose }) {
 
   const handleScroll = () => {
     if (!carouselRef.current || !hasPhotos) return;
-    const scrollPosition = carouselRef.current.scrollLeft;
-    const slideWidth = carouselRef.current.offsetWidth;
-    const index = Math.round(scrollPosition / slideWidth);
-    setCurrentIndex(index);
+    // 比較每張圖的中心與容器中心的距離，找出最靠近的那張
+    const containerCenter =
+      carouselRef.current.scrollLeft + carouselRef.current.offsetWidth / 2;
+    let closestIdx = 0;
+    let minDist = Infinity;
+    slideRefs.current.forEach((el, i) => {
+      if (!el) return;
+      const elCenter = el.offsetLeft + el.offsetWidth / 2;
+      const dist = Math.abs(elCenter - containerCenter);
+      if (dist < minDist) {
+        minDist = dist;
+        closestIdx = i;
+      }
+    });
+    setCurrentIndex(closestIdx);
   };
 
-  // 2. 自動輪播邏輯：只有在多張圖片時才執行
+  // 自動輪播邏輯：只有在多張圖片時才執行
   useEffect(() => {
     if (isDragging || !hasPhotos || displayImages.length <= 1) return;
     const interval = setInterval(() => {
       setCurrentIndex((prev) => {
         const next = (prev + 1) % displayImages.length;
-        if (carouselRef.current) {
-          const slideWidth = carouselRef.current.offsetWidth;
-          carouselRef.current.scrollTo({
-            left: next * slideWidth,
-            behavior: 'smooth',
-          });
-        }
+        // 用 scrollIntoView 讓瀏覽器自動計算置中，不需手算 offset
+        slideRefs.current[next]?.scrollIntoView({
+          behavior: 'smooth',
+          inline: 'center',
+          block: 'nearest',
+        });
         return next;
       });
     }, 3000);
@@ -101,7 +113,8 @@ export default function JobDetailsModal({ job, onClose }) {
                 {displayImages.map((img, idx) => (
                   <div
                     key={idx}
-                    className="w-[250px] h-[150px] flex-shrink-0 snap-center select-none overflow-hidden"
+                    ref={(el) => (slideRefs.current[idx] = el)}
+                    className="w-[250px] h-[150px] flex-shrink-0 snap-center select-none rounded-[8px] overflow-hidden"
                   >
                     {img ? (
                       <img

@@ -4,14 +4,18 @@ import SelectField from './components/SelectField';
 import InputField from './components/InputField';
 import HeroBanner from './components/HeroBanner';
 import JobDetailsModal from './components/JobDetailsModal';
-import { getJobs, getJobById, getEducationLevels, getSalaryLevels } from './api';
-import zIndex from '@mui/material/styles/zIndex';
+import {
+  getJobs,
+  getJobById,
+  getEducationLevels,
+  getSalaryLevels,
+} from './api';
 
 function App() {
   const [jobs, setJobs] = useState([]);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 1440);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
   const [educationLevels, setEducationLevels] = useState([]);
   const [salaryLevels, setSalaryLevels] = useState([]);
   const [selectedJobDetails, setSelectedJobDetails] = useState(null);
@@ -25,6 +29,9 @@ function App() {
   const [filterCompany, setFilterCompany] = useState('');
   const [filterEducation, setFilterEducation] = useState('');
   const [filterSalary, setFilterSalary] = useState('');
+
+  const perPage = isMobile ? 4 : 6;
+  const totalPages = Math.ceil(total / perPage) || 1;
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 1024);
@@ -70,9 +77,6 @@ function App() {
       setTotal(data.total);
     });
   }, [page, filterEducation, filterCompany, filterSalary, isMobile]);
-
-  const perPage = isMobile ? 4 : 6;
-  const totalPages = Math.ceil(total / perPage) || 1;
 
   const getPageNumbers = () => {
     const maxDisplay = isMobile ? 6 : 9;
@@ -234,7 +238,7 @@ function App() {
                   label="公司名稱"
                   value={draftCompany}
                   onChange={setDraftCompany}
-                  placeholder="請輸入公司名稱" 
+                  placeholder="請輸入公司名稱"
                 />
               </div>
               <div className="w-[200px]">
@@ -244,7 +248,7 @@ function App() {
                   onChange={setDraftEducation}
                   options={educationLevels}
                   placeholder="不限"
-                /> 
+                />
               </div>
               <div className="w-[200px]">
                 <SelectField
