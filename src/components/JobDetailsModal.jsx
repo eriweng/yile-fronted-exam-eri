@@ -4,12 +4,14 @@ import CarouselIndicator from './CarouselIndicator';
 const BASE = import.meta.env.BASE_URL;
 
 export default function JobDetailsModal({ job, onClose }) {
-  // 使用現有圖檔作為輪播圖預設佔位
-  const images = [
-    `${BASE}hero-bg.png`,
-    `${BASE}hero-silhouette.png`,
-    `${BASE}hero-character.png`,
-  ];
+  // 若 API 有提供圖片陣列即使用，否則使用佔位圖
+  const images = job.companyPhoto && job.companyPhoto.length > 0 
+    ? job.companyPhoto 
+    : [
+        `${BASE}hero-bg.png`,
+        `${BASE}hero-silhouette.png`,
+        `${BASE}hero-character.png`,
+      ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const carouselRef = useRef(null);
@@ -69,11 +71,10 @@ export default function JobDetailsModal({ job, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-[100] bg-black/50 flex items-center justify-center p-[16px] transition-opacity"
+      className="fixed inset-0 z-[100] bg-gray-1000/50 flex items-center justify-center p-[16px] transition-opacity"
       onClick={handleBackdropClick}
     >
-      <div className="bg-white w-full max-w-[500px] h-full max-h-[90vh] md:h-auto md:max-h-[90vh] rounded-[16px] shadow-lg flex flex-col overflow-hidden transform transition-transform">
-        
+      <div className="bg-white w-[331px] md:w-full max-w-[500px] h-full max-h-[768px] md:max-h-[90vh] rounded-[16px] shadow-[0px_11px_15px_-7px_rgba(0,0,0,0.2),0px_24px_38px_3px_rgba(0,0,0,0.14)] flex flex-col overflow-hidden transform transition-transform">
         {/* Header */}
         <div className="px-[24px] py-[16px] border-b border-gray-300">
           <h3 className="text-display-5 font-bold text-gray-1000">詳細資訊</h3>
@@ -114,7 +115,7 @@ export default function JobDetailsModal({ job, onClose }) {
                   />
                 ))}
               </div>
-              
+
               <div className="absolute bottom-[12px] left-0 w-full flex justify-center gap-[6px]">
                 {images.map((_, i) => (
                   <CarouselIndicator active={i === currentIndex} key={i} />
@@ -124,13 +125,13 @@ export default function JobDetailsModal({ job, onClose }) {
 
             {/* Job Description */}
             <div className="flex flex-col gap-[12px]">
-              <h4 className="text-display-5 font-bold text-gray-1000">工作內容</h4>
-              <div className="text-body-sm text-gray-800 whitespace-pre-wrap leading-relaxed">
-                【職位：{job.jobTitle}】<br /><br />
-                【工作地點：公司總部 - 台北市】<br /><br />
-                【職責與要求】<br />
-                {job.description}
-              </div>
+              <h4 className="text-display-5 font-bold text-gray-1000">
+                工作內容
+              </h4>
+              <div 
+                className="text-body-sm text-gray-800 whitespace-pre-wrap leading-relaxed [&>h1]:text-lg [&>h1]:font-bold [&>h1]:mb-2 [&>h2]:text-base [&>h2]:font-bold [&>h2]:mb-2 [&>ul]:list-disc [&>ul]:ml-4"
+                dangerouslySetInnerHTML={{ __html: job.description }}
+              />
             </div>
           </div>
         </div>

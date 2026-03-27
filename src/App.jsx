@@ -177,13 +177,25 @@ function App() {
                 )}
                 salary={getLabel(salaryLevels, job.salaryId, '面議')}
                 description={job.preview}
+                onClick={() => setSelectedJobDetails({
+                  companyName: job.companyName,
+                  jobTitle: job.jobTitle,
+                  description: job.description || job.preview || '無詳細工作內容',
+                  companyPhoto: job.companyPhoto
+                })}
               />
             ))}
           </div>
 
           <Pagination />
         </div>
-      </div>
+        {selectedJobDetails && (
+          <JobDetailsModal
+            job={selectedJobDetails}
+            onClose={() => setSelectedJobDetails(null)}
+          />
+        )}
+      </div> 
     );
   }
 
@@ -270,6 +282,7 @@ function App() {
                         companyName: job.companyName,
                         jobTitle: job.jobTitle,
                         description: job.description || job.preview || '無詳細工作內容',
+                        companyPhoto: job.companyPhoto
                       })}
                     />
                   ))}
