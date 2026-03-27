@@ -5,6 +5,7 @@ import InputField from './components/InputField';
 import HeroBanner from './components/HeroBanner';
 import JobDetailsModal from './components/JobDetailsModal';
 import { getJobs, getJobById, getEducationLevels, getSalaryLevels } from './api';
+import zIndex from '@mui/material/styles/zIndex';
 
 function App() {
   const [jobs, setJobs] = useState([]);
@@ -26,7 +27,7 @@ function App() {
   const [filterSalary, setFilterSalary] = useState('');
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 1280);
+    const handleResize = () => setIsMobile(window.innerWidth < 1024);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -151,7 +152,7 @@ function App() {
   // ── Mobile ────────────────────────────────────────────
   if (isMobile) {
     return (
-      <div className="mx-auto min-h-screen max-w-[375px] bg-white shadow-xl flex flex-col overflow-hidden">
+      <div className="mx-auto min-h-screen min-w-[375px] bg-white shadow-xl flex flex-col overflow-hidden">
         {/* Hero */}
         <HeroBanner />
 
@@ -216,7 +217,7 @@ function App() {
         {/* Hero（等比例縮放，正常文件流） */}
         <HeroBanner />
         {/* 內容卡（Hero 下方浮動） */}
-        <div className="relative z-70 mx-[28px]">
+        <div className="relative mx-[28px]">
           <div className="bg-white rounded-[12px] border border-[1px] border-gray-300 shadow-desktop-card p-[24px] flex flex-col gap-[20px] h-[676px] overflow-hidden">
             {/* 標題列 */}
             <div className="flex items-center gap-[8px]">
@@ -263,7 +264,7 @@ function App() {
             </div>
 
             {/* 卡片格 */}
-            <div className="h-[502px] overflow-auto">
+            <div className="h-[458px] overflow-hidden">
               {jobs.length === 0 ? (
                 <div className="h-full flex items-center justify-center text-gray-700 text-body-lg border border-[1px] border-gray-500 rounded-[6px]">
                   無資料
@@ -284,7 +285,7 @@ function App() {
                       description={job.preview}
                       onClick={async () => {
                         const detail = await getJobById(job.id);
-                        console.log('[onClick] getJobById response:', detail);
+                        // console.log('[onClick] getJobById response:', detail);
                         setSelectedJobDetails({
                           companyName: detail.companyName,
                           jobTitle: detail.jobTitle,

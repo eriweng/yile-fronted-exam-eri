@@ -21,12 +21,8 @@ export default function JobCard({
   onClick,
 }) {
   return (
-    <div
-      onClick={onClick}
-      className="flex flex-col w-full min-h-[220px] rounded-[6px] border border-[1px] border-gray-500 p-[16px] gap-[10px] bg-white hover:shadow-custom-glow transition-shadow duration-200 cursor-pointer"
-    >
+    <div className="flex flex-col w-full min-h-[220px] rounded-[6px] border border-[1px] border-gray-500 p-[16px] gap-[10px] bg-white hover:shadow-custom-glow transition-shadow duration-200 cursor-pointer">
       <h5 className="text-display-5 font-bold text-gray-1000">{companyName}</h5>
-
       <div className="flex flex-col gap-[8px]">
         <div className="flex items-center gap-[6px] text-gray-800 text-body-sm">
           <PersonIcon />
@@ -41,12 +37,13 @@ export default function JobCard({
           <span className="items-center -ml-[1px]">{salary}</span>
         </div>
       </div>
-
       <p className="w-full h-[40px] text-body-sm text-gray-1000 line-clamp-2">
         {description}
       </p>
-
-      <div className="text-center font-bold text-orange-700 text-body-sm mt-auto">
+      <div
+        className="text-center font-bold text-orange-700 text-body-sm mt-auto cursor-pointer hover:text-orange-400 transition-colors transform hover:scale-110 duration-300 smooth-in ease-out"
+        onClick={onClick}
+      >
         查看細節
       </div>
     </div>

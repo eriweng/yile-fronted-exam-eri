@@ -4,7 +4,7 @@ import CarouselIndicator from './CarouselIndicator';
 const BASE = import.meta.env.BASE_URL;
 
 export default function JobDetailsModal({ job, onClose }) {
-  // 1. 判斷是否有圖片
+
   const hasPhotos = job.companyPhoto && job.companyPhoto.length > 0;
 
   // 若沒圖片，陣列放一個 [null] 確保 map 能執行一次來渲染「暫無圖片」
@@ -70,7 +70,7 @@ export default function JobDetailsModal({ job, onClose }) {
       className="fixed inset-0 z-[100] bg-black/50 flex items-center justify-center p-[16px]"
       onClick={handleBackdropClick}
     >
-      <div className="bg-white w-full max-w-[750px] h-full rounded-[4px] shadow-xl flex flex-col overflow-hidden">
+      <div className="bg-white w-full max-w-[750px] h-[768px] rounded-[4px] shadow-xl flex flex-col overflow-hidden">
         {/* Header */}
         <div className="px-[24px] py-[16px] border-b border-gray-300">
           <h3 className="text-display-5 font-bold text-gray-1000">詳細資訊</h3>
@@ -151,7 +151,7 @@ export default function JobDetailsModal({ job, onClose }) {
         <div className="px-[24px] py-[16px] border-t border-gray-300 flex justify-end">
           <button
             onClick={onClose}
-            className="px-6 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors cursor-pointer"
+            className="px-6 py-2 text-body-lg text-gray-1000 hover:text-gray-800 cursor-pointer transition-colors transform hover:scale-110 duration-300 ease-out"
           >
             關閉
           </button>

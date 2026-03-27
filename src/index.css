@@ -96,4 +96,21 @@
     --red-1400: #170907;
     --red-1500: #0a0403;
   }
+
+  @layer utilities {
+    @keyframes scale-pulse {
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.05);
+      }
+    }
+
+    .animate-scale-pulse {
+      animation: scale-pulse 1.5s ease-in-out infinite;
+    }
+  }
 }
