@@ -50,6 +50,9 @@ apiClient.interceptors.response.use(
 /** @param {{ pre_page: number, page: number }} params */
 export const getJobs = (params) => apiClient.get('/jobs', { params });
 
+/** @param {string} id */
+export const getJobById = (id) => apiClient.get(`/jobs/${id}`);
+
 export const getEducationLevels = () => apiClient.get('/educationLevelList');
 
 export const getSalaryLevels = () => apiClient.get('/salaryLevelList');

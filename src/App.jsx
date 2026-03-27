@@ -4,7 +4,7 @@ import SelectField from './components/SelectField';
 import InputField from './components/InputField';
 import HeroBanner from './components/HeroBanner';
 import JobDetailsModal from './components/JobDetailsModal';
-import { getJobs, getEducationLevels, getSalaryLevels } from './api';
+import { getJobs, getJobById, getEducationLevels, getSalaryLevels } from './api';
 
 function App() {
   const [jobs, setJobs] = useState([]);
@@ -177,12 +177,16 @@ function App() {
                 )}
                 salary={getLabel(salaryLevels, job.salaryId, '面議')}
                 description={job.preview}
-                onClick={() => setSelectedJobDetails({
-                  companyName: job.companyName,
-                  jobTitle: job.jobTitle,
-                  description: job.description || job.preview || '無詳細工作內容',
-                  companyPhoto: job.companyPhoto
-                })}
+                onClick={async () => {
+                  const detail = await getJobById(job.id);
+                  console.log('[onClick] getJobById response:', detail);
+                  setSelectedJobDetails({
+                    companyName: detail.companyName,
+                    jobTitle: detail.jobTitle,
+                    description: detail.description || '無詳細工作內容',
+                    companyPhoto: detail.companyPhoto,
+                  });
+                }}
               />
             ))}
           </div>
@@ -195,7 +199,7 @@ function App() {
             onClose={() => setSelectedJobDetails(null)}
           />
         )}
-      </div> 
+      </div>
     );
   }
 
@@ -278,12 +282,16 @@ function App() {
                       )}
                       salary={getLabel(salaryLevels, job.salaryId, '面議')}
                       description={job.preview}
-                      onClick={() => setSelectedJobDetails({
-                        companyName: job.companyName,
-                        jobTitle: job.jobTitle,
-                        description: job.description || job.preview || '無詳細工作內容',
-                        companyPhoto: job.companyPhoto
-                      })}
+                      onClick={async () => {
+                        const detail = await getJobById(job.id);
+                        console.log('[onClick] getJobById response:', detail);
+                        setSelectedJobDetails({
+                          companyName: detail.companyName,
+                          jobTitle: detail.jobTitle,
+                          description: detail.description || '無詳細工作內容',
+                          companyPhoto: detail.companyPhoto,
+                        });
+                      }}
                     />
                   ))}
                 </div>
