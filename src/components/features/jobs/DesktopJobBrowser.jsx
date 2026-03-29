@@ -32,8 +32,13 @@ export default function DesktopJobBrowser({ state }) {
   } = state;
 
   const [selectedJobDetails, setSelectedJobDetails] = useState(null);
+  const [isDetailLoading, setIsDetailLoading] = useState(false);
 
   const handleJobClick = async (job) => {
+    // 立即開啟 Modal 並顯示基本資料與骨架圖
+    setIsDetailLoading(true);
+    setSelectedJobDetails(job);
+    
     try {
       const detail = await getJobById(job.id);
       setSelectedJobDetails({
@@ -45,6 +50,9 @@ export default function DesktopJobBrowser({ state }) {
     } catch (err) {
       console.error(err);
       setError('無法取得職缺詳細資料');
+      setSelectedJobDetails(null);
+    } finally {
+      setIsDetailLoading(false);
     }
   };
 
@@ -146,6 +154,7 @@ export default function DesktopJobBrowser({ state }) {
       {selectedJobDetails && (
         <JobDetailsModal
           job={selectedJobDetails}
+          isLoading={isDetailLoading}
           onClose={() => setSelectedJobDetails(null)}
         />
       )}

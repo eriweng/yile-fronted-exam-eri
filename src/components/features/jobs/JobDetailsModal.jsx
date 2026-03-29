@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import CarouselIndicator from '../../common/CarouselIndicator';
+import JobDetailsSkeleton from '../../common/JobDetailsSkeleton';
 
 const BASE = import.meta.env.BASE_URL;
 
-export default function JobDetailsModal({ job, onClose }) {
+export default function JobDetailsModal({ job, onClose, isLoading }) {
 
   const hasPhotos = job.companyPhoto && job.companyPhoto.length > 0;
 
@@ -90,74 +91,78 @@ export default function JobDetailsModal({ job, onClose }) {
 
         {/* Body */}
         <div className="flex-1 overflow-y-auto">
-          <div className="px-[24px] py-[20px] flex flex-col gap-[20px]">
-            <div className="flex items-center gap-[8px]">
-              <h2 className="text-display-5 font-bold text-gray-1000">
-                {job.companyName || 'Unknown'}
-              </h2>
-              <p className="text-display-6 text-gray-1000">{job.jobTitle}</p>
-            </div>
-
-            {/* Carousel 區域 */}
-            <div className="relative w-full pb-[28px] mt-[-8px]">
-              <div
-                ref={carouselRef}
-                className={`flex w-full h-[150px] gap-[12px] ${hasPhotos ? 'overflow-x-auto snap-x snap-mandatory' : 'overflow-hidden justify-center'} scroll-smooth [&::-webkit-scrollbar]:hidden`}
-                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-                onMouseDown={handleMouseDown}
-                onMouseLeave={handleMouseLeave}
-                onMouseUp={handleMouseUp}
-                onMouseMove={handleMouseMove}
-                onScroll={handleScroll}
-              >
-                {displayImages.map((img, idx) => (
-                  <div
-                    key={idx}
-                    ref={(el) => (slideRefs.current[idx] = el)}
-                    className="w-[250px] h-[150px] flex-shrink-0 snap-center select-none rounded-[8px] overflow-hidden"
-                  >
-                    {img ? (
-                      <img
-                        src={img}
-                        alt={`Slide ${idx + 1}`}
-                        className="w-full h-full object-cover"
-                        draggable="false"
-                      />
-                    ) : (
-                      /* 垂直水平置中的「暫無圖片」 */
-                      <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                        <span className="text-gray-400 text-body-lg font-medium">
-                          暫無圖片
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                ))}
+          {isLoading ? (
+            <JobDetailsSkeleton />
+          ) : (
+            <div className="px-[24px] py-[20px] flex flex-col gap-[20px]">
+              <div className="flex items-center gap-[8px]">
+                <h2 className="text-display-5 font-bold text-gray-1000">
+                  {job.companyName || 'Unknown'}
+                </h2>
+                <p className="text-display-6 text-gray-1000">{job.jobTitle}</p>
               </div>
 
-              {/* 只有多張圖片時才顯示指示點 */}
-              {hasPhotos && displayImages.length > 1 && (
-                <div className="absolute bottom-[12px] left-0 w-full flex justify-center gap-[6px]">
-                  {displayImages.map((_, i) => (
-                    <CarouselIndicator active={i === currentIndex} key={i} />
+              {/* Carousel 區域 */}
+              <div className="relative w-full pb-[28px] mt-[-8px]">
+                <div
+                  ref={carouselRef}
+                  className={`flex w-full h-[150px] gap-[12px] ${hasPhotos ? 'overflow-x-auto snap-x snap-mandatory' : 'overflow-hidden justify-center'} scroll-smooth [&::-webkit-scrollbar]:hidden`}
+                  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                  onMouseDown={handleMouseDown}
+                  onMouseLeave={handleMouseLeave}
+                  onMouseUp={handleMouseUp}
+                  onMouseMove={handleMouseMove}
+                  onScroll={handleScroll}
+                >
+                  {displayImages.map((img, idx) => (
+                    <div
+                      key={idx}
+                      ref={(el) => (slideRefs.current[idx] = el)}
+                      className="w-[250px] h-[150px] flex-shrink-0 snap-center select-none rounded-[8px] overflow-hidden"
+                    >
+                      {img ? (
+                        <img
+                          src={img}
+                          alt={`Slide ${idx + 1}`}
+                          className="w-full h-full object-cover"
+                          draggable="false"
+                        />
+                      ) : (
+                        /* 垂直水平置中的「暫無圖片」 */
+                        <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                          <span className="text-gray-400 text-body-lg font-medium">
+                            暫無圖片
+                          </span>
+                        </div>
+                      )}
+                    </div>
                   ))}
                 </div>
-              )}
-            </div>
 
-            {/* 工作內容 */}
-            <div className="flex flex-col gap-[12px]">
-              <h4 className="text-display-6 font-bold text-gray-1100">
-                工作內容
-              </h4>
-              <div
-                className="text-gray-800 text-body-lg leading-relaxed [&_h1]:text-body-lg [&_h1]:font-bold [&_h2]:text-body-lg [&_h2]:font-bold [&_h3]:text-body-lg [&_h3]:font-bold [&_p]:text-body-lg [&_li]:text-body-lg [&_a]:text-body-lg"
-                dangerouslySetInnerHTML={{
-                  __html: job.description || '無詳細工作內容',
-                }}
-              />
+                {/* 只有多張圖片時才顯示指示點 */}
+                {hasPhotos && displayImages.length > 1 && (
+                  <div className="absolute bottom-[12px] left-0 w-full flex justify-center gap-[6px]">
+                    {displayImages.map((_, i) => (
+                      <CarouselIndicator active={i === currentIndex} key={i} />
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* 工作內容 */}
+              <div className="flex flex-col gap-[12px]">
+                <h4 className="text-display-6 font-bold text-gray-1100">
+                  工作內容
+                </h4>
+                <div
+                  className="text-gray-800 text-body-lg leading-relaxed [&_h1]:text-body-lg [&_h1]:font-bold [&_h2]:text-body-lg [&_h2]:font-bold [&_h3]:text-body-lg [&_h3]:font-bold [&_p]:text-body-lg [&_li]:text-body-lg [&_a]:text-body-lg"
+                  dangerouslySetInnerHTML={{
+                    __html: job.description || '無詳細工作內容',
+                  }}
+                />
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Footer */}
