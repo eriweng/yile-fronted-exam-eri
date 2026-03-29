@@ -3,6 +3,8 @@ import HeroBanner from './HeroBanner';
 import JobCard from './JobCard';
 import JobDetailsModal from './JobDetailsModal';
 import Pagination from '../../common/Pagination';
+import JobCardSkeleton from '../../common/JobCardSkeleton';
+import Toast from '../../common/Toast';
 import { getJobById } from '../../../api';
 
 export default function MobileJobBrowser({ state }) {
@@ -15,6 +17,9 @@ export default function MobileJobBrowser({ state }) {
     salaryLevels,
     visiblePages,
     getLabel,
+    isLoading,
+    error,
+    setError,
   } = state;
 
   const [selectedJobDetails, setSelectedJobDetails] = useState(null);
@@ -30,6 +35,7 @@ export default function MobileJobBrowser({ state }) {
       });
     } catch (err) {
       console.error(err);
+      setError('無法取得職缺詳細資料');
     }
   };
 
@@ -48,17 +54,27 @@ export default function MobileJobBrowser({ state }) {
         </div>
 
         <div className="flex flex-col gap-[16px] w-full items-center">
-          {jobs.map((job) => (
-            <JobCard
-              key={job.id}
-              companyName={job.companyName}
-              jobTitle={job.jobTitle}
-              education={getLabel(educationLevels, job.educationId, '不限學歷')}
-              salary={getLabel(salaryLevels, job.salaryId, '面議')}
-              description={job.preview}
-              onClick={() => handleJobClick(job)}
-            />
-          ))}
+          {isLoading ? (
+            Array.from({ length: 4 }).map((_, idx) => (
+              <JobCardSkeleton key={idx} />
+            ))
+          ) : jobs.length === 0 ? (
+            <div className="h-[200px] flex items-center justify-center text-gray-700 text-body-lg">
+              無資料
+            </div>
+          ) : (
+            jobs.map((job) => (
+              <JobCard
+                key={job.id}
+                companyName={job.companyName}
+                jobTitle={job.jobTitle}
+                education={getLabel(educationLevels, job.educationId, '不限學歷')}
+                salary={getLabel(salaryLevels, job.salaryId, '面議')}
+                description={job.preview}
+                onClick={() => handleJobClick(job)}
+              />
+            ))
+          )}
         </div>
 
         <Pagination
@@ -75,6 +91,8 @@ export default function MobileJobBrowser({ state }) {
           onClose={() => setSelectedJobDetails(null)}
         />
       )}
+      
+      <Toast message={error} onClose={() => setError(null)} />
     </div>
   );
 }

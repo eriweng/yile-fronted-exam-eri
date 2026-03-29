@@ -8,7 +8,10 @@ export function useJobSearch({ isMobile }) {
   const [educationLevels, setEducationLevels] = useState([]);
   const [salaryLevels, setSalaryLevels] = useState([]);
 
-  // 篩選暫存值（桌機點搜尋才套用）
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // 篩選暫存值（桌機搜尋才套用）
   const [draftCompany, setDraftCompany] = useState('');
   const [draftEducation, setDraftEducation] = useState('');
   const [draftSalary, setDraftSalary] = useState('');
@@ -47,6 +50,8 @@ export function useJobSearch({ isMobile }) {
   }, [draftCompany]);
 
   useEffect(() => {
+    setIsLoading(true);
+    setError(null);
     getJobs({
       pre_page: perPage,
       page,
@@ -56,6 +61,10 @@ export function useJobSearch({ isMobile }) {
     }).then((data) => {
       setJobs(data.data);
       setTotal(data.total);
+    }).catch((err) => {
+      setError(err.message || '無法取得職缺資料，請稍後再試。');
+    }).finally(() => {
+      setIsLoading(false);
     });
   }, [page, filterEducation, filterCompany, filterSalary, isMobile]);
 
@@ -102,5 +111,8 @@ export function useJobSearch({ isMobile }) {
     handleClear,
     visiblePages,
     getLabel,
+    isLoading,
+    error,
+    setError,
   };
 }

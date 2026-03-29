@@ -5,6 +5,8 @@ import JobDetailsModal from './JobDetailsModal';
 import InputField from '../../common/InputField';
 import SelectField from '../../common/SelectField';
 import Pagination from '../../common/Pagination';
+import JobCardSkeleton from '../../common/JobCardSkeleton';
+import Toast from '../../common/Toast';
 import { getJobById } from '../../../api';
 
 export default function DesktopJobBrowser({ state }) {
@@ -24,6 +26,9 @@ export default function DesktopJobBrowser({ state }) {
     handleClear,
     visiblePages,
     getLabel,
+    isLoading,
+    error,
+    setError,
   } = state;
 
   const [selectedJobDetails, setSelectedJobDetails] = useState(null);
@@ -39,6 +44,7 @@ export default function DesktopJobBrowser({ state }) {
       });
     } catch (err) {
       console.error(err);
+      setError('無法取得職缺詳細資料');
     }
   };
 
@@ -100,7 +106,13 @@ export default function DesktopJobBrowser({ state }) {
 
             {/* 卡片格 */}
             <div className="h-[458px] overflow-hidden">
-              {jobs.length === 0 ? (
+              {isLoading ? (
+                <div className="grid grid-cols-3 gap-[12px]">
+                  {Array.from({ length: 6 }).map((_, idx) => (
+                    <JobCardSkeleton key={idx} />
+                  ))}
+                </div>
+              ) : jobs.length === 0 ? (
                 <div className="h-full flex items-center justify-center text-gray-700 text-body-lg border border-[1px] border-gray-500 rounded-[6px]">
                   無資料
                 </div>
@@ -137,6 +149,8 @@ export default function DesktopJobBrowser({ state }) {
           onClose={() => setSelectedJobDetails(null)}
         />
       )}
+      
+      <Toast message={error} onClose={() => setError(null)} />
     </>
   );
 }
