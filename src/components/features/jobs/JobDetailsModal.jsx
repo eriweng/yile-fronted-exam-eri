@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import CarouselIndicator from './CarouselIndicator';
+import CarouselIndicator from '../../common/CarouselIndicator';
 
 const BASE = import.meta.env.BASE_URL;
 
@@ -79,10 +79,10 @@ export default function JobDetailsModal({ job, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-[100] bg-black/50 flex items-center justify-center p-[16px]"
+      className="fixed inset-0 z-[100] min-h-screen bg-black/50 flex items-center justify-center px-[16px]"
       onClick={handleBackdropClick}
     >
-      <div className="bg-white w-full max-w-[750px] h-[768px] rounded-[4px] shadow-xl flex flex-col overflow-hidden">
+      <div className="bg-white w-full h-full max-w-[750px] max-h-[768px] rounded-[4px] shadow-xl flex flex-col overflow-hidden">
         {/* Header */}
         <div className="px-[24px] py-[16px] border-b border-gray-300">
           <h3 className="text-display-5 font-bold text-gray-1000">詳細資訊</h3>
