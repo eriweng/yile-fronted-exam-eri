@@ -126,6 +126,7 @@ export default function JobDetailsModal({ job, onClose, isLoading }) {
                           alt={`Slide ${idx + 1}`}
                           className="w-full h-full object-cover"
                           draggable="false"
+                          loading="lazy"
                         />
                       ) : (
                         /* 垂直水平置中的「暫無圖片」 */

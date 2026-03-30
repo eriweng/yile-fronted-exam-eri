@@ -26,7 +26,8 @@ export default function DesktopJobBrowser({ state }) {
     handleClear,
     visiblePages,
     getLabel,
-    isLoading,
+    isInitialLoading,
+    isFetching,
     error,
     setError,
   } = state;
@@ -113,8 +114,8 @@ export default function DesktopJobBrowser({ state }) {
             </div>
 
             {/* 卡片格 */}
-            <div className="h-[458px] overflow-hidden">
-              {isLoading ? (
+            <div className={`h-[458px] overflow-hidden transition-opacity duration-300 ${isFetching ? 'opacity-50' : 'opacity-100'}`}>
+              {isInitialLoading ? (
                 <div className="grid grid-cols-3 gap-[12px]">
                   {Array.from({ length: 6 }).map((_, idx) => (
                     <JobCardSkeleton key={idx} />

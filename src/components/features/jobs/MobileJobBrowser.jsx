@@ -17,7 +17,8 @@ export default function MobileJobBrowser({ state }) {
     salaryLevels,
     visiblePages,
     getLabel,
-    isLoading,
+    isInitialLoading,
+    isFetching,
     error,
     setError,
   } = state;
@@ -61,8 +62,8 @@ export default function MobileJobBrowser({ state }) {
           </h2>
         </div>
 
-        <div className="flex flex-col gap-[16px] w-full items-center">
-          {isLoading ? (
+        <div className={`flex flex-col gap-[16px] w-full items-center transition-opacity duration-300 ${isFetching ? 'opacity-50' : 'opacity-100'}`}>
+          {isInitialLoading ? (
             Array.from({ length: 4 }).map((_, idx) => (
               <JobCardSkeleton key={idx} />
             ))

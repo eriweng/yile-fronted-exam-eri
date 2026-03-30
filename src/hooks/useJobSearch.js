@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { getJobs, getEducationLevels, getSalaryLevels } from '../api';
 
 export function useJobSearch({ isMobile }) {
@@ -8,7 +8,10 @@ export function useJobSearch({ isMobile }) {
   const [educationLevels, setEducationLevels] = useState([]);
   const [salaryLevels, setSalaryLevels] = useState([]);
 
-  const [isLoading, setIsLoading] = useState(false);
+  // isInitialLoading 用於首次載入或重大改變時顯示完整骨架圖
+  // isFetching 用於分頁切換時，畫面保留並變半透明
+  const [isInitialLoading, setIsInitialLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState(null);
 
   // 篩選暫存值（桌機搜尋才套用）
@@ -23,6 +26,9 @@ export function useJobSearch({ isMobile }) {
 
   const perPage = isMobile ? 4 : 6;
   const totalPages = Math.ceil(total / perPage) || 1;
+
+  // 用於快取每頁結果的 Ref字典
+  const cacheRef = useRef({});
 
   useEffect(() => {
     Promise.all([getEducationLevels(), getSalaryLevels()]).then(
@@ -49,23 +55,83 @@ export function useJobSearch({ isMobile }) {
     return () => clearTimeout(timer);
   }, [draftCompany]);
 
+  // 取得當前過濾組合的專屬快取 key
+  const getCacheKey = (p) => `${p}_${perPage}_${filterCompany}_${filterEducation}_${filterSalary}`;
+
   useEffect(() => {
-    setIsLoading(true);
-    setError(null);
-    getJobs({
-      pre_page: perPage,
-      page,
-      ...(filterEducation && { education_level: filterEducation }),
-      ...(filterCompany && { company_name: filterCompany }),
-      ...(filterSalary && { salary_level: filterSalary }),
-    }).then((data) => {
-      setJobs(data.data);
-      setTotal(data.total);
-    }).catch((err) => {
-      setError(err.message || '無法取得職缺資料，請稍後再試。');
-    }).finally(() => {
-      setIsLoading(false);
-    });
+    const currentCacheKey = getCacheKey(page);
+
+    const fetchJobs = async () => {
+      setError(null);
+
+      // 若快取中已有，瞬間切換，並背景觸發預載下一頁
+      if (cacheRef.current[currentCacheKey]) {
+        const cached = cacheRef.current[currentCacheKey];
+        setJobs(cached.data);
+        setTotal(cached.total);
+        if (page < Math.ceil(cached.total / perPage)) {
+          prefetchNextPage(page + 1);
+        }
+        return;
+      }
+
+      // 若無快取，決定 UI 狀態：若是第一頁或畫面沒有資料，顯示大骨架圖；否則只顯示半透明
+      if (jobs.length === 0 || page === 1) {
+        setIsInitialLoading(true);
+      } else {
+        setIsFetching(true);
+      }
+
+      try {
+        const res = await getJobs({
+          pre_page: perPage,
+          page,
+          ...(filterEducation && { education_level: filterEducation }),
+          ...(filterCompany && { company_name: filterCompany }),
+          ...(filterSalary && { salary_level: filterSalary }),
+        });
+
+        // 存入快取
+        cacheRef.current[currentCacheKey] = { data: res.data, total: res.total };
+
+        setJobs(res.data);
+        setTotal(res.total);
+
+        // 如果還有下一頁，背景預載
+        if (page < Math.ceil(res.total / perPage)) {
+          prefetchNextPage(page + 1);
+        }
+      } catch (err) {
+        setError(err.message || '無法取得職缺資料，請稍後再試。');
+        if (jobs.length === 0) setJobs([]);
+      } finally {
+        setIsInitialLoading(false);
+        setIsFetching(false);
+      }
+    };
+
+    const prefetchNextPage = async (nextPage) => {
+      const nextCacheKey = getCacheKey(nextPage);
+      if (cacheRef.current[nextCacheKey]) return; // 已預先載入過了
+
+      try {
+        const res = await getJobs({
+          pre_page: perPage,
+          page: nextPage,
+          ...(filterEducation && { education_level: filterEducation }),
+          ...(filterCompany && { company_name: filterCompany }),
+          ...(filterSalary && { salary_level: filterSalary }),
+        });
+        if (res.data && res.data.length > 0) {
+           cacheRef.current[nextCacheKey] = { data: res.data, total: res.total };
+        }
+      } catch (e) {
+        console.warn('背景預獲取下一頁失敗:', e);
+      }
+    };
+
+    fetchJobs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, filterEducation, filterCompany, filterSalary, isMobile]);
 
   const handleClear = () => {
@@ -111,7 +177,8 @@ export function useJobSearch({ isMobile }) {
     handleClear,
     visiblePages,
     getLabel,
-    isLoading,
+    isInitialLoading,
+    isFetching,
     error,
     setError,
   };
