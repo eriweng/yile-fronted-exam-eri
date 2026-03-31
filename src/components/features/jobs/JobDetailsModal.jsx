@@ -127,7 +127,6 @@ export default function JobDetailsModal({ job, onClose, isLoading }) {
 
               {/* Carousel 區域 */}
               <div className="relative w-full pb-[28px] mt-[-8px]">
-                {/* 輪播視窗：不需要 paddingLeft/Right，也沒有多餘的空白盡頭 */}
                 <div
                   ref={carouselRef}
                   className={`flex w-full h-[150px] gap-[8px] ${hasPhotos ? 'overflow-x-auto snap-x snap-mandatory' : 'overflow-hidden justify-center'} scroll-smooth cursor-grab active:cursor-grabbing [&::-webkit-scrollbar]:hidden`}
@@ -145,7 +144,6 @@ export default function JobDetailsModal({ job, onClose, isLoading }) {
                     <div
                       key={idx}
                       ref={(el) => (slideRefs.current[idx] = el)}
-                      // 移除圓角 (rounded-[8px])，保持 snap-center 中間置中的要求
                       className="w-[250px] h-[150px] flex-shrink-0 snap-center select-none overflow-hidden"
                     >
                       {img ? (
