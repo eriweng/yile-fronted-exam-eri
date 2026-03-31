@@ -13,21 +13,15 @@ export function useJobSearch({ isMobile }) {
   const [isInitialLoading, setIsInitialLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState(null);
-
-  // 篩選暫存值（桌機搜尋才套用）
   const [draftCompany, setDraftCompany] = useState('');
   const [draftEducation, setDraftEducation] = useState('');
   const [draftSalary, setDraftSalary] = useState('');
-
-  // 已套用的篩選值
   const [filterCompany, setFilterCompany] = useState('');
   const [filterEducation, setFilterEducation] = useState('');
   const [filterSalary, setFilterSalary] = useState('');
 
   const perPage = isMobile ? 4 : 6;
   const totalPages = Math.ceil(total / perPage) || 1;
-
-  // 用於快取每頁結果的 Ref字典
   const cacheRef = useRef({});
 
   useEffect(() => {
@@ -39,7 +33,6 @@ export function useJobSearch({ isMobile }) {
     );
   }, []);
 
-  // 監聽篩選條件變化（即時搜尋）
   useEffect(() => {
     setFilterEducation(draftEducation);
     setFilterSalary(draftSalary);
@@ -55,7 +48,6 @@ export function useJobSearch({ isMobile }) {
     return () => clearTimeout(timer);
   }, [draftCompany]);
 
-  // 取得當前過濾組合的專屬快取 key
   const getCacheKey = (p) => `${p}_${perPage}_${filterCompany}_${filterEducation}_${filterSalary}`;
 
   useEffect(() => {
@@ -112,8 +104,7 @@ export function useJobSearch({ isMobile }) {
 
     const prefetchNextPage = async (nextPage) => {
       const nextCacheKey = getCacheKey(nextPage);
-      if (cacheRef.current[nextCacheKey]) return; // 已預先載入過了
-
+      if (cacheRef.current[nextCacheKey]) return;
       try {
         const res = await getJobs({
           pre_page: perPage,
@@ -131,7 +122,6 @@ export function useJobSearch({ isMobile }) {
     };
 
     fetchJobs();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, filterEducation, filterCompany, filterSalary, isMobile]);
 
   const handleClear = () => {

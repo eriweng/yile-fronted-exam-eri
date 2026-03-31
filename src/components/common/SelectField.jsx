@@ -22,9 +22,9 @@ export default function SelectField({
         '& .MuiInputLabel-root': {
           fontSize: '12px',
           color: 'var(--gray-1000)',
-          backgroundColor: 'var(--gray-100)', // 重要：遮住邊框
-          padding: '0 6px', // 增加一點水平間距，更像 Figma
-          marginLeft: '-4px', // 微調對齊
+          backgroundColor: 'var(--gray-100)',
+          padding: '0 6px',
+          marginLeft: '-4px',
         },
         '& .MuiInputLabel-shrink': {
           transform: 'translate(14px, -9px) scale(1)',

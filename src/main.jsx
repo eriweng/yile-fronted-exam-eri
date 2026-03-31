@@ -1,4 +1,3 @@
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
@@ -79,12 +78,10 @@ new Server({
     this.namespace = 'api/v1';
 
     this.get('/jobs', (schema, request) => {
-      // * filter
       const companyName = request.queryParams.company_name;
       const educationLevel = Number(request.queryParams.education_level);
       const salaryLevel = Number(request.queryParams.salary_level);
 
-      // * pagination
       const prePage = Number(request.queryParams.pre_page);
       const page = Number(request.queryParams.page);
 

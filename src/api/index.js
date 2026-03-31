@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-// 建立 axios 實體
 const apiClient = axios.create({
   baseURL: '/api/v1',
   timeout: 10000,
@@ -9,7 +8,6 @@ const apiClient = axios.create({
   },
 });
 
-// 定義 HTTP 狀態碼處理方式 (攔截器)
 apiClient.interceptors.response.use(
   (response) => {
     return response.data;

@@ -16,7 +16,7 @@ export default function JobDetailsModal({ job, onClose, isLoading }) {
   // 每個 slide 的 ref，用於精準 scrollIntoView
   const slideRefs = useRef([]);
 
-  // ── 拖曳與滾動邏輯 (僅在有圖片時啟用) ─────────────────────────────
+  // 拖曳與滾動邏輯 (僅在有圖片時啟用) 
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
@@ -65,7 +65,7 @@ export default function JobDetailsModal({ job, onClose, isLoading }) {
         // 用 scrollIntoView 讓瀏覽器自動計算置中，不需手算 offset
         slideRefs.current[next]?.scrollIntoView({
           behavior: 'smooth',
-          inline: 'center',
+          inline: 'center', 
           block: 'nearest',
         });
         return next;

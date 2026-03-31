@@ -7,10 +7,7 @@ export default function HeroBanner() {
 
   useEffect(() => {
     const handleMouseMove = (e) => {
-      // 以視窗中心點為基準計算偏移量
       const centerX = window.innerWidth / 2;
-
-      // 微幅移動控制
       const moveX = ((e.clientX - centerX) / centerX) * 4;
       setMouseOffset({ x: moveX });
     };
@@ -74,7 +71,7 @@ export default function HeroBanner() {
           }}
         />
 
-        {/* 4. 眼睛（隨滑鼠座標微幅移動） */}
+        {/* 4. 眼睛 */}
         <img
           src={`${BASE}hero-eye-left.png`}
           alt="hero-eye-left"
@@ -102,7 +99,7 @@ export default function HeroBanner() {
           }}
         />
       </div>
-      {/* 5. Heelco Logo */}
+      {/* 5. Logo */}
       <img
         src={`${BASE}hero-logo.png`}
         className="animate-scale-pulse"

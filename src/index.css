@@ -45,7 +45,6 @@
   }
 
   :root {
-    /* Gray Scale (100: #FFFFFF -> 1500: #000000) */
     --gray-100: #ffffff;
     --gray-200: #f5f5f5;
     --gray-300: #e6e6e6;
@@ -62,7 +61,6 @@
     --gray-1400: #030303;
     --gray-1500: #000000;
 
-    /* Orange Scale (100: #FBE6D1) */
     --orange-100: #fbe6d1;
     --orange-200: #f8d4b3;
     --orange-300: #f4c08f;
@@ -79,7 +77,7 @@
     --orange-1400: #1a0e07;
     --orange-1500: #0d0703;
 
-    /* Red Scale (100: #FBEFEC) */
+
     --red-100: #fbefec;
     --red-200: #f7d8d1;
     --red-300: #f2bfb6;

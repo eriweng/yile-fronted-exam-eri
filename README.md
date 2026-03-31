@@ -1,167 +1,91 @@
-# Frontend Engineer Exam
+# Yile Frontend Exam 實作專案
 
-這是一份 Yile 前端工程師的徵才專案，會需根據規則及設計檔完成頁面需求。
+這是一份 Yile 前端工程師的面試實作專案，基於 React 18 搭配 Vite 進行開發，並選用 Tailwind CSS 作為主要的樣式解決方案。專案已完成指定的 RWD 頁面切版、API 串接，同時針對程式碼架構、使用者體驗 (UX) 及網頁效能進行了優化。
 
-## ⭐️ 需求
-
-### 框架
-
-1. 語言：Javascript
-2. Framework：
-   1. 建議使用 React.js / Next.js，使用 Vue.js 亦可接受
-
-### CSS
-
-可以選擇以下其一或者搭配做為使用
-
-1. [Material UI](https://mui.com/material-ui/)
-2. [Sass](https://sass-lang.com/)
-3. [Tailwindcss](https://tailwindcss.com/)
-
-### Coding Style
-
-採用 [Google Coding Style](https://google.github.io/styleguide/) 或 [Airbnb Style](https://github.com/airbnb/javascript)，我們將會審查你的程式碼是否符合風格規範
-
-## 📝 實作描述
-
-- 請 Fork 此專案做開發
-- 根據 [Figma](https://www.figma.com/file/VcTqAK0x3JBi9nMvqN9YXJ/Web-Frontend-Developer-Exam?type=design&node-id=0%3A1&mode=design&t=EAnp3AAU1aqJ66e2-1) 實作頁面，請 `登入` 帳號才可看到實作細節
-- 若有任何優化、更好方式請自由發揮，但確保基本功能皆有達成需求
-
-## ✅ 提交說明
-
-1. 請將專案上傳至 Github，提交 Repositories 連結給HR，我們將會閱讀你的程式碼
-2. 請提供一份 README 文件說明
-   1. 如何執行此專案
-   2. 專案架構、邏輯說明
-   3. 專案遇到的困難、問題及解決方法
-3. 請回傳給HR，內容需包含 Github Repositories Link
-
-## 🥇 加分項目
-
-- 加載資料時的過渡表現
-- 細節動畫表現
-- 部署至任一平台以供成果檢視，例如：Heroku、AWS S3、GCS、Github Page …… 等
-
-## ⚙️ API
-
-### Job List [GET] `/api/v1/jobs`
-
-工作列表
-
-**Parameter**
-
-| Name | Description |
-| ---------------- | -------------- |
-| pre_page         | 每頁顯示筆數     |
-| page             | 指定頁面頁數     |
-| company_name     | 公司名稱        |
-| education_level  | 教育程度 id     |
-| salary_level     | 薪資範圍 id     |
-
-**Response**
-
-```json
-{
-  "data": [
-    {
-      "id": "1",
-      "companyName": "立刻科技",
-      "jobTitle": "資深前端工程師",
-      "educationId": 4,
-      "salaryId": 3,
-      "preview": "招募經驗豐富的前端工程師，共創卓越網頁體驗！",
-    }
-  ],
-  "total": 1
-}
-```
+## 線上預覽
+專案已部署至 GitHub Pages：
+[https://eriweng.github.io/yile-fronted-exam-eri/](https://eriweng.github.io/yile-fronted-exam-eri/)
 
 ---
 
-### Education Level List [GET] `/api/v1/educationLevelList`
+## 如何執行此專案
 
-教育程度列表
+### 環境需求
+* Node.js (推薦 v18 以上版本)
+* npm 或 yarn
 
-**Response**
+### 執行步驟
 
-```json
-[
-  {
-     "id": "1", "label": "國小"
-  },
-  {
-     "id": "2", "label": "國中"
-  },
-  {
-     "id": "3", "label": "高中"
-  },
-  {
-     "id": "4", "label": "大學"
-  },
-  {
-     "id": "5", "label": "碩士"
-  },
-  {
-     "id": "6", "label": "博士"
-  }
-]
-```
+1. **Clone 專案與切換目錄**
+   ```bash
+   git clone https://github.com/eriweng/yile-fronted-exam-eri.git
+   cd web-frontend-exam-main
+   ```
 
----
+2. **安裝依賴套件**
+   ```bash
+   npm install
+   ```
 
-### Salary Level List [GET] `/api/v1/salaryLevelList`
+3. **啟動本地開發伺服器**
+   ```bash
+   npm run dev
+   ```
+   *伺服器啟動後，請於瀏覽器開啟 `http://localhost:5173`。專案已掛載內建的 MirageJS Mock API 作為後端控制器。*
 
-薪資範圍列表
-
-**Response**
-
-```json
-[
-  {
-    "id": "1", "label": "待遇面議"
-  },
-  {
-    "id": "2", "label": "月薪 40,000 ~ 60,000 元"
-  },
-  {
-    "id": "3", "label": "月薪 70,000 ~ 100,000 元"
-  },
-  {
-    "id": "4", "label": "年薪 800,000 ~ 1,000,000 元"
-  },
-  {
-    "id": "5", "label": "年薪 800,000 ~ 1,500,000 元"
-  },
-  {
-    "id": "6", "label": "年薪 1,500,000 ~ 2,000,000 元"
-  },
-  {
-    "id": "7", "label": "年薪 2,000,000 ~ 2,500,000 元"
-  }
-]
-```
+4. **編譯與部署 (Build & Deploy)**
+   ```bash
+   npm run build
+   # 如有設定 Github Pages，也可執行 npm run deploy 自動發布
+   ```
 
 ---
 
-### Job [GET] `/api/v1/jobs/:id`
+## 專案架構與邏輯說明
 
-單一工作資訊
+為了提升專案的可維護性、可讀性與未來擴充能力，我打破了原本全部擠在 `App.jsx` 的狀態結構，實行了**『職責分離 (Separation of Concerns)』**設計模式。
 
-**Response**
+### 目錄結構
+*   `src/api/`：Axios interceptors (攔截器)。
+*   `src/components/common/`：高重用性的 UI 元件。
+*   `src/components/features/jobs/`：業務型元件。
+*   `src/hooks/`：所有與狀態管理、API 互動的邏輯被統一抽離成 Custom Hooks (`useJobSearch.js`, `useWindowSize.js`)。
 
-```json
-{
-  "id": "6",
-  "description": "<h1>貨運操作員</h1><h2>工作地點：公司總部 - 台北市</h2><h2>職責與要求</h2><ul><li>負責倉儲內的物品搬運、分裝、包裝及出貨作業，確保貨物的準確性和完整性。<br />遵循公司的作業流程和安全規範，保障倉庫內的工作環境。<br />與團隊成員合作，確保倉儲操作的順暢進行。<br />需具備基本的電腦操作能力，能使用相關SaaS系統進行庫存管理。<br />需要有良好的溝通協調能力，能有效地與其他部門合作，確保整體物流運作的協調性。<br />對倉儲物流行業有興趣，願意學習並接受公司提供的培訓。</li></ul><h2>資格</h2><ul><li>至少高中畢業，具備相關物流或倉儲操作經驗者優先考慮。<br />具有貨運相關證照者尤佳。<br />對工作積極負責，有良好的工作態度和團隊協作精神。<br />願意接受輪班工作，能夠適應倉儲作業的體力需求。</li></ul><h2>我們提供</h2><ul><li>充滿挑戰性的工作環境，與國際化的專業團隊一同合作。<br />完善的培訓體系，協助您提升相關技能和知識。<br />良好的晉升機會，公司快速發展將為您提供更多職涯發展空間。<br />公司福利包括勞健保、團體保險、員工餐飲補助等。</li></ul><p>如果您渴望挑戰自我，想要加入一個充滿活力和機會的團隊，請將您的履歷寄至 <a href=\"mailto:hr@jenjanlogistics.com\">hr@jenjanlogistics.com</a>，我們期待與您攜手共創物流行業的未來。<br /><br />【JenJan真站電商衛星倉儲物流】期待您的加入！</p>",
-  "companyPhoto": [
-    "https://picsum.photos/250/150",
-    "https://picsum.photos/250/150",
-    "https://picsum.photos/250/150",
-    "https://picsum.photos/250/150",
-    "https://picsum.photos/250/150"
-  ],
-  "jobTitle": "廚師助手",
-  "companyName": "餐飲樂活"
-}
-```
+### 設計模式與實作策略
+
+1. **職責分離與 Container-Presenter Pattern**
+   `App` 元件做為 Controller (Container)，專職處理環境判斷 (`useWindowSize`) 與資料流派發 (`useJobSearch`)。UI 的渲染邏輯則下放至 `DesktopJobBrowser` 與 `MobileJobBrowser` (Presenters)，避免 RWD 邏輯導致過度擁擠的條件渲染，提高元件獨立性與擴展性。
+
+2. **自訂 Hook (Custom Hooks) 封裝**
+   - **狀態與副作用管理**：過濾參數 (`company_name`, `education_level`, `salary_level`) 與 API 呼叫流程均封裝於 `useJobSearch` 中。
+   - **Debounce 實作**：使用原生 `setTimeout` 與 `useEffect` 的 Cleanup 機制實作防抖，控制 `filterCompany` 的更新頻率，避免高頻繁的 Input 變更過度消耗 API 請求資源。
+   - **併發處理**：對於互相獨立的資源 (如學歷與薪資選單)，採用 `Promise.all` 進行並行請求，避免 Waterfall 效應縮短網路等待時間。
+
+3. **狀態與效能管理 (State & Performance)**
+   - **載入過渡期 (Stale-While-Revalidate & Skeleton)**：精細區分初次載入 (`isInitialLoading`) 與分頁切換 (`isFetching`)。當頁碼切換時，畫面不立即卸載現有節點，而是以 `opacity` 漸變過渡至新內容；初次載入或觸發 Modal 事件時，則迅速佈局 Skeleton 組件，減輕非同步的延遲感。
+   - **非同步快取與 Prefetch 策略**：利用 `useRef` 構建輕量級的 Local Cache，並在當前頁面資料載入完成時接續執行 `prefetchNextPage`。系統會在背景預先抓取下一頁資源，降低使用者後續交互的等待時間。
+   - **資源優先級配置**：於 Entry 階段採用 `preload` 提前下載關鍵呈現資源 (如 Hero Banner 原件)，並在非首屏的影像 (如 Modal 內的附圖) 設定原生 `loading="lazy"`，降低首屏 Initial Load 的頻寬壓力。
+
+---
+
+## 遇到的困難、問題及解決方法
+
+### 1. 困難一：龐大的 `App.jsx` 難以維護並阻礙擴充
+*   **問題**：開發初期，所有的 API 呼叫、過濾器狀態儲存、RWD 版型的 `if-else` 判斷全部塞在單一檔案中。程式碼高強度耦合，導致牽一髮動全身的風險急遽升高。
+*   **解決方法**：執行全站架構重構。將狀態資料儲存與 API 機制提取封裝成 `useJobSearch` Hook；同時配合 `useWindowSize`，利用 Container-Presenter 概念在 `App.jsx` 入口判斷裝置，直接導流至對應的 View 元件進行渲染。
+
+### 2. 困難二：網路延遲使 UX 產生強烈割裂感
+*   **問題**：如果在行動裝置或慢速網路下，切換分頁或是點開「職缺細節 (`JobDetailsModal`)」的瞬間，使用者由於乾等 API 傳輸而會遇到白畫面，容易產生「是不是壞了」的錯覺。
+*   **解決方法**：
+    *   設計具備現代感的 **Skeleton 骨架圖** 閃爍效果。
+    *   重構 `JobDetailsModal` 邏輯：點擊「查看細節」不傻等資料回傳，而是**彈窗秒開並顯示骨架圖**，待非同步 API 讀完後才滑出真實內容。
+    *   當 API 拋出 Exception 時，利用建立好的 `Toast` 浮層反饋錯誤提示，確保系統穩定性。
+
+### 3. 困難三：極致的網頁連線與加載效能瓶頸
+*   **問題**：首屏最大的一張插圖載入過慢導致 LCP 分數下降；且使用者頻繁點擊下一頁或上一頁時效能不夠流暢。
+*   **解決方法 (效能三連擊)**：
+    1.  **原生渲染加速**：直接在 `index.html` 的 `<head>` 區增設多行 `<link rel="preload">` 來強制預載首屏大圖片；並針對需捲動/彈窗才出現的相關附圖加上 `<img loading="lazy">` 釋放頻寬 Bundler。
+    2.  **背景資料預先獲取 (Prefetching)**：在 `useJobSearch` 偷偷埋入了預加載機制。當使用者在閱讀第 1 頁時，系統會在背景底層靜默發送 API 去拉第 2 頁的資料並存進 Cache 字典。
+    3.  **Stale-While-Revalidate UX**：結合 Cache，當使用者點下下一頁時直接命中記憶體，體驗**零毫秒切換**！如果是未被緩存的跳頁，卡片區塊不會清空突兀跳頻，而是自動轉為 50% 降低不透明度 (`opacity-50`)，等新資料再平滑取代舊資料。
+
+---

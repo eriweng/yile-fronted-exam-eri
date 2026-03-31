@@ -27,7 +27,6 @@ export default function MobileJobBrowser({ state }) {
   const [isDetailLoading, setIsDetailLoading] = useState(false);
 
   const handleJobClick = async (job) => {
-    // 立即開啟 Modal 並顯示基本資料與骨架圖
     setIsDetailLoading(true);
     setSelectedJobDetails(job);
 
