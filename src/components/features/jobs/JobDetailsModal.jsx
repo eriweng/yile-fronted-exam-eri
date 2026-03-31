@@ -6,78 +6,100 @@ const BASE = import.meta.env.BASE_URL;
 
 export default function JobDetailsModal({ job, onClose, isLoading }) {
   const hasPhotos = job.companyPhoto && job.companyPhoto.length > 0;
+  const originalImages = hasPhotos ? job.companyPhoto : [null];
+  const N = originalImages.length;
+  
+  // 若有多張圖片，複製三份製造「無限循環」陣列 [ ...原圖, ...原圖, ...原圖 ]
+  const displayImages = N > 1 ? [...originalImages, ...originalImages, ...originalImages] : originalImages;
 
-  // 若沒圖片，陣列放一個 [null] 確保 map 能執行一次來渲染「暫無圖片」
-  const displayImages = hasPhotos ? job.companyPhoto : [null];
+  // 無限輪播起始點設定在中間那個區塊的第一張 (即 index = N)
+  const [currentIndex, setCurrentIndex] = useState(N > 1 ? N : 0);
+  const [hasTransition, setHasTransition] = useState(true);
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const carouselRef = useRef(null);
-  // 每個 slide 的 ref，用於精準 scrollIntoView
-  const slideRefs = useRef([]);
-
-  const scrollTo = (index) => {
-    if (!slideRefs.current[index]) return;
-    slideRefs.current[index].scrollIntoView({
-      behavior: 'smooth',
-      inline: 'center',
-      block: 'nearest',
-    });
-    setCurrentIndex(index);
-  };
-
-  // 拖曳與滾動邏輯 (僅在有圖片時啟用)
+  // 拖曳狀態
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
+  const [dragOffset, setDragOffset] = useState(0);
 
-  const handleMouseDown = (e) => {
-    if (!hasPhotos) return;
-    setIsDragging(true);
-    setStartX(e.pageX - carouselRef.current.offsetLeft);
-    setScrollLeft(carouselRef.current.scrollLeft);
-  };
-  const handleMouseLeave = () => setIsDragging(false);
-  const handleMouseUp = () => setIsDragging(false);
-  const handleMouseMove = (e) => {
-    if (!isDragging || !hasPhotos) return;
-    e.preventDefault();
-    const x = e.pageX - carouselRef.current.offsetLeft;
-    const walk = x - startX;
-    carouselRef.current.scrollLeft = scrollLeft - walk;
-  };
-
-  const handleScroll = () => {
-    if (!carouselRef.current || !hasPhotos) return;
-    // 比較每張圖的中心與容器中心的距離，找出最靠近的那張
-    const containerCenter =
-      carouselRef.current.scrollLeft + carouselRef.current.offsetWidth / 2;
-    let closestIdx = 0;
-    let minDist = Infinity;
-    slideRefs.current.forEach((el, i) => {
-      if (!el) return;
-      const elCenter = el.offsetLeft + el.offsetWidth / 2;
-      const dist = Math.abs(elCenter - containerCenter);
-      if (dist < minDist) {
-        minDist = dist;
-        closestIdx = i;
-      }
-    });
-    setCurrentIndex(closestIdx);
+  // --- 無縫切換 (Infinite Loop) 邏輯 ---
+  const handleTransitionEnd = () => {
+    if (N <= 1) return;
+    // 如果滑到了最前面的複製區塊
+    if (currentIndex < N) {
+      setHasTransition(false); // 關閉動畫
+      setCurrentIndex(currentIndex + N); // 瞬間跳回中間區塊的對應位置
+    } 
+    // 如果滑到了最後面的複製區塊
+    else if (currentIndex >= 2 * N) {
+      setHasTransition(false);
+      setCurrentIndex(currentIndex - N);
+    }
   };
 
-  // 自動輪播邏輯：只有在多張圖片時才執行
+  // 每次跳轉(沒有動畫的瞬間)結束後，需要把動畫加回來
   useEffect(() => {
-    if (isDragging || !hasPhotos || displayImages.length <= 1) return;
+    if (!hasTransition) {
+      const timer = setTimeout(() => {
+        setHasTransition(true);
+      }, 30);
+      return () => clearTimeout(timer);
+    }
+  }, [hasTransition]);
+
+  // --- 自動輪播 ---
+  useEffect(() => {
+    if (N <= 1 || isDragging) return;
     const interval = setInterval(() => {
-      const next = (currentIndex + 1) % displayImages.length;
-      scrollTo(next);
+      setHasTransition(true);
+      setCurrentIndex((prev) => prev + 1);
     }, 3000);
     return () => clearInterval(interval);
-  }, [displayImages.length, isDragging, hasPhotos, currentIndex]);
+  }, [N, isDragging]);
 
+  // --- 滑鼠與觸控拖曳邏輯 ---
+  const getX = (e) => (e.touches ? e.touches[0].pageX : e.pageX);
+
+  const handleStart = (e) => {
+    if (N <= 1) return;
+    setIsDragging(true);
+    setStartX(getX(e));
+    setDragOffset(0);
+    setHasTransition(false); // 拖曳時關閉動畫，跟從手指/滑鼠
+  };
+
+  const handleMove = (e) => {
+    if (!isDragging) return;
+    setDragOffset(getX(e) - startX);
+  };
+
+  const handleEnd = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    setHasTransition(true);
+    
+    // 依據拖曳距離決定翻頁方向
+    if (dragOffset > 50) {
+      setCurrentIndex((prev) => prev - 1);
+    } else if (dragOffset < -50) {
+      setCurrentIndex((prev) => prev + 1);
+    }
+    setDragOffset(0);
+  };
+
+  // --- 指示點點擊 ---
+  const scrollToOriginal = (origIndex) => {
+    setHasTransition(true);
+    // 強制跳轉至中間正常區塊的該對應圖片
+    setCurrentIndex(N + origIndex);
+  };
+
+  // 背景點擊關閉
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget) onClose();
   };
+
+  // 顯示下方的活耀點
+  const activeIndicator = currentIndex % N;
 
   return (
     <div
@@ -105,58 +127,62 @@ export default function JobDetailsModal({ job, onClose, isLoading }) {
 
               {/* Carousel 區域 */}
               <div className="relative w-full pb-[28px] mt-[-8px]">
-                <div
-                  ref={carouselRef}
-                  className={`flex w-full h-[150px] gap-[12px] ${hasPhotos ? 'overflow-x-auto snap-x snap-mandatory' : 'overflow-hidden justify-center'} scroll-smooth [&::-webkit-scrollbar]:hidden`}
-                  style={{
-                    scrollbarWidth: 'none',
-                    msOverflowStyle: 'none',
-                    // 動態計算左右 padding 讓首尾圖片能置中：(100% - 圖片寬度) / 2
-                    paddingLeft: hasPhotos ? 'calc((100% - 250px) / 2)' : '0',
-                    paddingRight: hasPhotos ? 'calc((100% - 250px) / 2)' : '0',
-                  }}
-                  onMouseDown={handleMouseDown}
-                  onMouseLeave={handleMouseLeave}
-                  onMouseUp={handleMouseUp}
-                  onMouseMove={handleMouseMove}
-                  onScroll={handleScroll}
-                >
-                  {displayImages.map((img, idx) => (
-                    <div
-                      key={idx}
-                      ref={(el) => (slideRefs.current[idx] = el)}
-                      className="w-[250px] h-[150px] flex-shrink-0 snap-center select-none rounded-[8px] overflow-hidden"
-                    >
-                      {img ? (
-                        <img
-                          src={img}
-                          alt={`Slide ${idx + 1}`}
-                          className="w-full h-full object-cover"
-                          draggable="false"
-                          loading="lazy"
-                        />
-                      ) : (
-                        /* 垂直水平置中的「暫無圖片」 */
-                        <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                          <span className="text-gray-400 text-body-lg font-medium">
-                            暫無圖片
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  ))}
+                {/* 輪播視窗：取消原生捲動與 Padding，只保留溢位隱藏 */}
+                <div className="relative w-full h-[150px] overflow-hidden rounded-[8px]">
+                  {/* 使用 CSS Transform 移動整條軌道 */}
+                  <div
+                    className="absolute left-1/2 flex h-full gap-[8px] cursor-grab active:cursor-grabbing"
+                    style={{
+                      // 置中數學公式：-(自身圖片一半寬度 125px) - (累積的寬度含 gap：258 * Index) + 拖曳偏移
+                      transform: `translateX(calc(${-125 - currentIndex * 258 + dragOffset}px))`,
+                      transition: hasTransition ? 'transform 0.3s ease-out' : 'none',
+                      width: 'max-content',
+                      touchAction: 'pan-y' // 允許原生的上下捲動，但橫向讓程式接管 
+                    }}
+                    onTransitionEnd={handleTransitionEnd}
+                    onMouseDown={handleStart}
+                    onMouseMove={handleMove}
+                    onMouseUp={handleEnd}
+                    onMouseLeave={handleEnd}
+                    onTouchStart={handleStart}
+                    onTouchMove={handleMove}
+                    onTouchEnd={handleEnd}
+                  >
+                    {displayImages.map((img, idx) => (
+                      <div
+                        key={idx}
+                        className="w-[250px] h-[150px] flex-shrink-0 select-none overflow-hidden"
+                      >
+                        {img ? (
+                          <img
+                            src={img}
+                            alt={`Slide ${idx + 1}`}
+                            className="w-full h-full object-cover pointer-events-none"
+                            draggable="false"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-gray-100 pointer-events-none">
+                            <span className="text-gray-400 text-body-lg font-medium">
+                              暫無圖片
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
                 {/* 只有多張圖片時才顯示指示點 */}
-                {hasPhotos && displayImages.length > 1 && (
+                {hasPhotos && N > 1 && (
                   <div className="absolute bottom-[12px] left-0 w-full flex justify-center gap-[6px]">
-                    {displayImages.map((_, i) => (
+                    {originalImages.map((_, i) => (
                       <div
                         key={i}
-                        onClick={() => scrollTo(i)}
+                        onClick={() => scrollToOriginal(i)}
                         className="cursor-pointer p-1"
                       >
-                        <CarouselIndicator active={i === currentIndex} />
+                        <CarouselIndicator active={i === activeIndicator} />
                       </div>
                     ))}
                   </div>
