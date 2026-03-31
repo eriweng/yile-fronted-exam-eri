@@ -5,7 +5,6 @@ import JobDetailsSkeleton from '../../common/JobDetailsSkeleton';
 const BASE = import.meta.env.BASE_URL;
 
 export default function JobDetailsModal({ job, onClose, isLoading }) {
-
   const hasPhotos = job.companyPhoto && job.companyPhoto.length > 0;
 
   // 若沒圖片，陣列放一個 [null] 確保 map 能執行一次來渲染「暫無圖片」
@@ -16,7 +15,17 @@ export default function JobDetailsModal({ job, onClose, isLoading }) {
   // 每個 slide 的 ref，用於精準 scrollIntoView
   const slideRefs = useRef([]);
 
-  // 拖曳與滾動邏輯 (僅在有圖片時啟用) 
+  const scrollTo = (index) => {
+    if (!slideRefs.current[index]) return;
+    slideRefs.current[index].scrollIntoView({
+      behavior: 'smooth',
+      inline: 'center',
+      block: 'nearest',
+    });
+    setCurrentIndex(index);
+  };
+
+  // 拖曳與滾動邏輯 (僅在有圖片時啟用)
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
@@ -60,19 +69,11 @@ export default function JobDetailsModal({ job, onClose, isLoading }) {
   useEffect(() => {
     if (isDragging || !hasPhotos || displayImages.length <= 1) return;
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => {
-        const next = (prev + 1) % displayImages.length;
-        // 用 scrollIntoView 讓瀏覽器自動計算置中，不需手算 offset
-        slideRefs.current[next]?.scrollIntoView({
-          behavior: 'smooth',
-          inline: 'center', 
-          block: 'nearest',
-        });
-        return next;
-      });
+      const next = (currentIndex + 1) % displayImages.length;
+      scrollTo(next);
     }, 3000);
     return () => clearInterval(interval);
-  }, [displayImages.length, isDragging, hasPhotos]);
+  }, [displayImages.length, isDragging, hasPhotos, currentIndex]);
 
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget) onClose();
@@ -83,7 +84,7 @@ export default function JobDetailsModal({ job, onClose, isLoading }) {
       className="fixed inset-0 z-[100] min-h-screen bg-black/50 flex items-center justify-center px-[16px]"
       onClick={handleBackdropClick}
     >
-      <div className="bg-white w-full h-full max-w-[750px] max-h-[768px] rounded-[4px] shadow-xl flex flex-col overflow-hidden">
+      <div className="bg-white w-full h-full max-w-[750px] max-h-[768px] rounded-[4px] shadow-modal flex flex-col overflow-hidden">
         {/* Header */}
         <div className="px-[24px] py-[16px] border-b border-gray-300">
           <h3 className="text-display-5 font-bold text-gray-1000">詳細資訊</h3>
@@ -107,7 +108,13 @@ export default function JobDetailsModal({ job, onClose, isLoading }) {
                 <div
                   ref={carouselRef}
                   className={`flex w-full h-[150px] gap-[12px] ${hasPhotos ? 'overflow-x-auto snap-x snap-mandatory' : 'overflow-hidden justify-center'} scroll-smooth [&::-webkit-scrollbar]:hidden`}
-                  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                  style={{
+                    scrollbarWidth: 'none',
+                    msOverflowStyle: 'none',
+                    // 動態計算左右 padding 讓首尾圖片能置中：(100% - 圖片寬度) / 2
+                    paddingLeft: hasPhotos ? 'calc((100% - 250px) / 2)' : '0',
+                    paddingRight: hasPhotos ? 'calc((100% - 250px) / 2)' : '0',
+                  }}
                   onMouseDown={handleMouseDown}
                   onMouseLeave={handleMouseLeave}
                   onMouseUp={handleMouseUp}
@@ -144,7 +151,13 @@ export default function JobDetailsModal({ job, onClose, isLoading }) {
                 {hasPhotos && displayImages.length > 1 && (
                   <div className="absolute bottom-[12px] left-0 w-full flex justify-center gap-[6px]">
                     {displayImages.map((_, i) => (
-                      <CarouselIndicator active={i === currentIndex} key={i} />
+                      <div
+                        key={i}
+                        onClick={() => scrollTo(i)}
+                        className="cursor-pointer p-1"
+                      >
+                        <CarouselIndicator active={i === currentIndex} />
+                      </div>
                     ))}
                   </div>
                 )}
